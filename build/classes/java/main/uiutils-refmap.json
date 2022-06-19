@@ -1,0 +1,40 @@
+{
+  "mappings": {
+    "org/uiutils/mixin/SleepingChatScreenMixin": {
+      "init": "Lnet/minecraft/class_423;method_25426()V"
+    },
+    "org/uiutils/mixin/accessor/ClientConnectionAccessor": {
+      "channel": "field_11651:Lio/netty/channel/Channel;"
+    },
+    "org/uiutils/mixin/ClientConnectionMixin": {
+      "sendImmediately": "Lnet/minecraft/class_2535;method_10764(Lnet/minecraft/class_2596;Lio/netty/util/concurrent/GenericFutureListener;)V"
+    },
+    "org/uiutils/mixin/HandledScreenMixin": {
+      "init": "Lnet/minecraft/class_465;method_25426()V",
+      "render": "Lnet/minecraft/class_465;method_25394(Lnet/minecraft/class_4587;IIF)V"
+    },
+    "org/uiutils/mixin/SignEditScreenMixin": {
+      "init": "Lnet/minecraft/class_498;method_25426()V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "org/uiutils/mixin/SleepingChatScreenMixin": {
+        "init": "Lnet/minecraft/class_423;method_25426()V"
+      },
+      "org/uiutils/mixin/accessor/ClientConnectionAccessor": {
+        "channel": "field_11651:Lio/netty/channel/Channel;"
+      },
+      "org/uiutils/mixin/ClientConnectionMixin": {
+        "sendImmediately": "Lnet/minecraft/class_2535;method_10764(Lnet/minecraft/class_2596;Lio/netty/util/concurrent/GenericFutureListener;)V"
+      },
+      "org/uiutils/mixin/HandledScreenMixin": {
+        "init": "Lnet/minecraft/class_465;method_25426()V",
+        "render": "Lnet/minecraft/class_465;method_25394(Lnet/minecraft/class_4587;IIF)V"
+      },
+      "org/uiutils/mixin/SignEditScreenMixin": {
+        "init": "Lnet/minecraft/class_498;method_25426()V"
+      }
+    }
+  }
+}
