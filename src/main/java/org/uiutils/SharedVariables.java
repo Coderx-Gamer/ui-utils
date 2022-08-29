@@ -10,7 +10,6 @@ public class SharedVariables {
     public static boolean sendUIPackets = true;
     public static boolean delayUIPackets = false;
     public static boolean shouldEditSign = true;
-    public static boolean fakeSleeping = false;
 
     public static ArrayList<Packet<?>> delayedUIPackets = new ArrayList<>();
 

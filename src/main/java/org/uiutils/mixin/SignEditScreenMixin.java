@@ -19,9 +19,14 @@ public class SignEditScreenMixin extends Screen {
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
+    // called when any sign edit screen is created
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
-        this.addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("close without packet"), (button) -> {
+
+        // register "close without packet" button for SignEditScreen
+        addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Close without packet"), (button) -> {
+
+            // disables sign editing and closes the current gui without sending a packet
             SharedVariables.shouldEditSign = false;
             mc.setScreen(null);
         }));
