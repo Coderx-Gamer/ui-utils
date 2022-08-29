@@ -1,2 +1,2 @@
 # ui-utils
-Another shitty mod that messes with guis.
+Dupe hunting mod for 1.19.2.
