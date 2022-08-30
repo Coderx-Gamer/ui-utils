@@ -29,3 +29,17 @@ Dupe hunting mod for 1.19.2.
 
 - Fabricate packet tutorial:
 ---
+
+- When clicking the "Fabricate packet" button you should see this window appear:
+
+![image](https://user-images.githubusercontent.com/85349822/187425789-f6b172d8-0745-4b43-b6b0-b746d4f51459.png)
+
+- Clicking "Click Slot" will open up this window:
+
+![image](https://user-images.githubusercontent.com/85349822/187425967-aeefe828-e18e-4d28-a24c-64680ec55cbc.png)
+
+- Enter the "Sync Id" and "Revision" value you see in the in-game gui to the "Click Slot Packet" gui.
+
+- The "Slot" value should be set to what slot you would like to click (starting from 0) you can generally find the location of gui slots on google for generic guis (e.g. double chest: ![image](https://user-images.githubusercontent.com/85349822/187426720-93f50986-cd1f-497a-a675-9ca9884fea13.png)).
+
+
