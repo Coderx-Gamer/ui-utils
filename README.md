@@ -40,6 +40,8 @@ Dupe hunting mod for 1.19.2.
 
 - Enter the "Sync Id" and "Revision" value you see in the in-game gui to the "Click Slot Packet" gui.
 
-- The "Slot" value should be set to what slot you would like to click (starting from 0) you can generally find the location of gui slots on google for generic guis (e.g. double chest: ![image](https://user-images.githubusercontent.com/85349822/187426720-93f50986-cd1f-497a-a675-9ca9884fea13.png)).
+- The "Slot" value should be set to what slot you would like to click (starting from 0) you can generally find the location of gui slots on google for generic guis, e.g. double chest:
+
+ ![image](https://user-images.githubusercontent.com/85349822/187426720-93f50986-cd1f-497a-a675-9ca9884fea13.png)
 
 
