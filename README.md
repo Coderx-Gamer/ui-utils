@@ -4,6 +4,7 @@ Dupe hunting mod for 1.19.2.
 ---
 
 - How to use:
+---
 
 - Open any inventory/container with the mod and you should see a few buttons.
 
