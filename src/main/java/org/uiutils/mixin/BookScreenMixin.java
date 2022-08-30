@@ -273,7 +273,7 @@ public class BookScreenMixin extends Screen {
                     JLabel statusLabel = new JLabel();
                     statusLabel.setForeground(Color.WHITE);
                     statusLabel.setFocusable(false);
-                    statusLabel.setBounds(175, 150, 75, 20);
+                    statusLabel.setBounds(125, 150, 125, 20);
 
                     JButton sendButton = new JButton("Send");
                     sendButton.setFocusable(false);
