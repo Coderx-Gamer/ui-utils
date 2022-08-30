@@ -1,4 +1,4 @@
-# ui-utils
+# UI-Utils
 Dupe hunting mod for 1.19.2.
 
 ---
@@ -29,6 +29,8 @@ Dupe hunting mod for 1.19.2.
 
 - Fabricate packet tutorial (Click Slot):
 ---
+
+- `ClickSlotC2SPacket`(s) are what the client sends to the server when clicking any slot in a gui (e.g. shift clicking an item).
 
 - When clicking the "Fabricate packet" button you should see this window appear:
 
@@ -67,6 +69,29 @@ Dupe hunting mod for 1.19.2.
 - Fabricate packet tutorial (Button Click):
 ---
 
+- `ButtonClickC2SPacket`(s) are what the client sends to the server when clicking a button in a server-side gui (e.g. clicking an enchantment in an enchantment table).
+
 - When clicking the "Fabricate packet" button you should see this window appear:
 
 ![image](https://user-images.githubusercontent.com/85349822/187425789-f6b172d8-0745-4b43-b6b0-b746d4f51459.png)
+
+- Clicking "Button Click" will open up this window:
+
+![image](https://user-images.githubusercontent.com/85349822/187430861-11c62616-10e9-4b4b-bdb1-918c93b4e4a3.png)
+
+- Enter the "Sync Id" field in the "Button Click Packet" gui as the "Sync Id" value you will see in the in-game gui.
+
+- Enter the "Button Id" field as what button you would like to click in a gui (starting from 0)
+
+- Example of this feature:
+---
+
+![image](https://user-images.githubusercontent.com/85349822/187432355-a8b15cf9-e7c6-4d2b-b779-fd084de14002.png)
+
+![image](https://user-images.githubusercontent.com/85349822/187432538-7f6b85f9-581b-442d-8027-9e0843b18939.png)
+
+![image](https://user-images.githubusercontent.com/85349822/187432690-950626ac-7aef-4e46-8da1-1d294fcb9975.png)
+
+---
+
+That's all the features for this mod currently, there may be more updates in the future but I cannot guarantee.
