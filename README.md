@@ -22,9 +22,9 @@ Dupe hunting mod for 1.19.2.
 
 - "Disconnect and send packets" will if "Delay packets" is turned on send the list of stored packets immediately and then disconnect right afterward (can create potential race conditions on non-vanilla servers).
 
-- "Sync Id: ??" is a number used interally to sync various gui related packets.
+- "Sync Id: ??" is a number used internally to sync various gui related packets.
 
-- "Revision: ??" is a number used interally to sync various gui related packets sent from the server to the client.
+- "Revision: ??" is a number used internally to sync various gui related packets sent from the server to the client.
 
 - "Fabricate packet" allows you to create a custom `ClickSlotC2SPacket` and `ButtonClickC2SPacket` within a window it creates.
 
