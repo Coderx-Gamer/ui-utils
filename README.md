@@ -27,7 +27,7 @@ Dupe hunting mod for 1.19.2.
 
 - "Fabricate packet" allows you to create a custom `ClickSlotC2SPacket` and `ButtonClickC2SPacket` within a window it creates.
 
-- Fabricate packet tutorial:
+- Fabricate packet tutorial (Click Slot):
 ---
 
 - When clicking the "Fabricate packet" button you should see this window appear:
@@ -44,4 +44,29 @@ Dupe hunting mod for 1.19.2.
 
  ![image](https://user-images.githubusercontent.com/85349822/187426720-93f50986-cd1f-497a-a675-9ca9884fea13.png)
 
+- The "Button" field should be set to either: (0 is a leftclick, 1 is a rightclick, 0-8 and 40 will be explained below).
 
+- The "Action" field should be set to one of these options,
+
+![image](https://user-images.githubusercontent.com/85349822/187427492-2ed0da1f-351c-4471-a4cc-064fe70f1e62.png)
+
+- "PICKUP" puts the item on the slot field on your cursor or visa versa, "QUICK_MOVE" is a shift click, "SWAP" acts as a hotbar or offhand swap (e.g. if your "Action" is set to "SWAP" and the "Button" set to 0-8, it will swap the item in the "Slot" field to one of those hotbar slots (starting from 0) or visa versa, "Button" being set to 40 will swap the item in the "Slot" field to your offhand or visa versa), "CLONE" acts as a middle click to clone items (only works in creative mode), "THROW" drops the item in the "Slot" field, "QUICK_CRAFT" is a bit complicated so you will have to experiment yourself or look into some code for it, "PICKUP_ALL" will pickup all the items matching to the item on your cursor, As long as "Slot" is within bounds of that gui.
+
+- The "Send" button will send the packet with all the info you inputed and will give a response if it was successful or failed to send the packet you provided.
+
+- Example of this feature:
+---
+
+![image](https://user-images.githubusercontent.com/85349822/187429892-afc74514-c454-4f01-9307-c85ff37cf790.png)
+
+- When clicking "Send" in the above image, It should drop the bedrock item on the ground.
+
+![image](https://user-images.githubusercontent.com/85349822/187430233-d94a497e-1698-4e01-a152-7002d1f1f6be.png)
+
+
+- Fabricate packet tutorial (Button Click):
+---
+
+- When clicking the "Fabricate packet" button you should see this window appear:
+
+![image](https://user-images.githubusercontent.com/85349822/187425789-f6b172d8-0745-4b43-b6b0-b746d4f51459.png)
