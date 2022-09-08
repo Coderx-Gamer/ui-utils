@@ -1,5 +1,5 @@
 # UI-Utils
-Dupe hunting mod for 1.19.2.
+Dupe hunting mod for 1.19.2. Incompatible with mac
 
 ---
 
@@ -14,9 +14,9 @@ Dupe hunting mod for 1.19.2.
 
 - "De-sync" closes your current gui server-side and keeps it open client-side.
 
-- "Send packets: ???" tells the client whether it should send any `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s).
+- "Send packets: true/false" tells the client whether it should send any `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s).
 
-- "Delay packets: ???" when turned on it will store all `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s) into a list and will not send them immdiately until turned off which sends them all at once.
+- "Delay packets: true/false" when turned on it will store all `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s) into a list and will not send them immdiately until turned off which sends them all at once.
 
 - "Save GUI" saves your current gui to a variable and can be accessed by pressing a keybind in the keybinding options (default key is 'V').
 
