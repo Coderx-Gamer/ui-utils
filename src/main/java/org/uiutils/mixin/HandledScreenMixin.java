@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.main.Main;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
@@ -37,56 +36,53 @@ public class HandledScreenMixin extends Screen {
     // called when creating a HandledScreen
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
-
         // register "close without packet" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Close without packet"), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
             // closes the current gui without sending a packet to the current server
             mc.setScreen(null);
-        }));
+        }).dimensions(5, 5, 160, 20).build());
 
         // register "de-sync" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 35, 90, 20, Text.of("De-sync"), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("De-sync"), (button) -> {
             // keeps the current gui open client-side and closed server-side
-            mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
-        }));
+            if (mc.player != null && mc.getNetworkHandler() != null) {
+                mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
+            }
+        }).dimensions(5, 35, 90, 20).build());
 
         // register "send packets" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 65, 160, 20, Text.of("Send packets: " + SharedVariables.sendUIPackets), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Send packets: " + SharedVariables.sendUIPackets), (button) -> {
             // tells the client if it should send any gui related packets
             SharedVariables.sendUIPackets = !SharedVariables.sendUIPackets;
             button.setMessage(Text.of("Send packets: " + SharedVariables.sendUIPackets));
-        }));
+        }).dimensions(5, 65, 160, 20).build());
 
         // register "delay packets" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 95, 160, 20, Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
             // toggles a setting to delay all gui related packets to be used later when turning this setting off
             SharedVariables.delayUIPackets = !SharedVariables.delayUIPackets;
             button.setMessage(Text.of("Delay packets: " + SharedVariables.delayUIPackets));
-            if (!SharedVariables.delayUIPackets && !SharedVariables.delayedUIPackets.isEmpty()) {
+            if (!SharedVariables.delayUIPackets && !SharedVariables.delayedUIPackets.isEmpty() && mc.getNetworkHandler() != null) {
                 for (Packet<?> packet : SharedVariables.delayedUIPackets) {
                     mc.getNetworkHandler().sendPacket(packet);
                 }
                 SharedVariables.delayedUIPackets.clear();
             }
-        }));
+        }).dimensions(5, 95, 160, 20).build());
 
         // register "save gui" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 125, 160, 20, Text.of("Save GUI"), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Save GUI"), (button) -> {
             // saves the current gui to a variable to be accessed later
             SharedVariables.storedScreen = mc.currentScreen;
-            SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
-        }));
+            if (mc.player != null) {
+                SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
+            }
+        }).dimensions(5, 125, 160, 20).build());
 
         // register "disconnect and send packets" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 155, 200, 20, Text.of("Disconnect and send packets"), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Disconnect and send packets"), (button) -> {
             // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
-            if (!SharedVariables.delayedUIPackets.isEmpty()) {
+            if (!SharedVariables.delayedUIPackets.isEmpty() && mc.getNetworkHandler() != null) {
                 SharedVariables.delayUIPackets = false;
                 for (Packet<?> packet : SharedVariables.delayedUIPackets) {
                     mc.getNetworkHandler().sendPacket(packet);
@@ -94,11 +90,10 @@ public class HandledScreenMixin extends Screen {
                 mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
                 SharedVariables.delayedUIPackets.clear();
             }
-        }));
+        }).dimensions(5, 155, 200, 20).build());
 
         // register "fabricate packet" button in all HandledScreens
-        addDrawableChild(new ButtonWidget(5, 185, 200, 20, Text.of("Fabricate packet"), (button) -> {
-
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
             // creates a gui allowing you to fabricate packets
 
             JFrame frame = new JFrame("Choose Packet");
@@ -199,13 +194,22 @@ public class HandledScreenMixin extends Screen {
                         SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
 
                         if (action != null) {
-                            mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>()));
-                            statusLabel.setForeground(Color.GREEN.darker());
-                            statusLabel.setText("Sent successfully!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
+                            if (mc.getNetworkHandler() != null) {
+                                mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>()));
+                                statusLabel.setForeground(Color.GREEN.darker());
+                                statusLabel.setText("Sent successfully!");
+                                MainClient.queueTask(() -> {
+                                    statusLabel.setForeground(Color.WHITE);
+                                    statusLabel.setText("");
+                                }, 1500L);
+                            } else {
+                                statusLabel.setForeground(Color.RED.darker());
+                                statusLabel.setText("Couldn't send - getNetworkHandler()Lnet/minecraft/client/network/ClientPlayNetworkHandler; returns null.");
+                                MainClient.queueTask(() -> {
+                                    statusLabel.setForeground(Color.WHITE);
+                                    statusLabel.setText("");
+                                }, 1500L);
+                            }
                         } else {
                             statusLabel.setForeground(Color.RED.darker());
                             statusLabel.setText("Invalid parameters!");
@@ -288,13 +292,22 @@ public class HandledScreenMixin extends Screen {
                         int syncId = Integer.parseInt(syncIdField.getText());
                         int buttonId = Integer.parseInt(buttonIdField.getText());
 
-                        mc.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(syncId, buttonId));
-                        statusLabel.setForeground(Color.GREEN.darker());
-                        statusLabel.setText("Sent successfully!");
-                        MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
-                            statusLabel.setText("");
-                        }, 1500L);
+                        if (mc.getNetworkHandler() != null) {
+                            mc.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(syncId, buttonId));
+                            statusLabel.setForeground(Color.GREEN.darker());
+                            statusLabel.setText("Sent successfully!");
+                            MainClient.queueTask(() -> {
+                                statusLabel.setForeground(Color.WHITE);
+                                statusLabel.setText("");
+                            }, 1500L);
+                        } else {
+                            statusLabel.setForeground(Color.RED.darker());
+                            statusLabel.setText("Couldn't send - getNetworkHandler()Lnet/minecraft/client/network/ClientPlayNetworkHandler; returns null.");
+                            MainClient.queueTask(() -> {
+                                statusLabel.setForeground(Color.WHITE);
+                                statusLabel.setText("");
+                            }, 1500L);
+                        }
                     } else {
                         statusLabel.setForeground(Color.RED.darker());
                         statusLabel.setText("Invalid parameters!");
@@ -323,13 +336,12 @@ public class HandledScreenMixin extends Screen {
             frame.add(clickSlotButton);
             frame.add(buttonClickButton);
             frame.setVisible(true);
-        }));
+        }).dimensions(5, 185, 200, 20).build());
     }
 
     // inject at the end of the render method
     @Inject(at = @At("TAIL"), method = "render")
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-
         // display sync id and revision
         MainClient.renderHandledScreen(mc, textRenderer, matrices);
     }
