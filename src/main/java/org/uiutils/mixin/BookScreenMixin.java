@@ -40,294 +40,326 @@ public class BookScreenMixin extends Screen {
 
         // check if the current gui is a lectern gui
         if ((Object) this instanceof LecternScreen) {
-            // copied from HandledScreenMixin.init()
 
             // register "close without packet" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Close without packet"), (button) -> {
-
-                // closes the current gui without sending a packet to the current server
-                mc.setScreen(null);
-            }));
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Close without packet"), button -> {
+                        // closes the current gui without sending a packet to the current server
+                        mc.setScreen(null);
+                    })
+                            .position(5, 5)
+                            .size(160, 20)
+                            .build()
+            );
 
             // register "de-sync" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 35, 90, 20, Text.of("De-sync"), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("De-sync"), button -> {
 
-                // keeps the current gui open client-side and closed server-side
-                mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
-            }));
+                        // keeps the current gui open client-side and closed server-side
+                        mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
+                    })
+                            .position(5, 35)
+                            .size(90, 20)
+                            .build()
+            );
 
             // register "send packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 65, 160, 20, Text.of("Send packets: " + SharedVariables.sendUIPackets), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Send packets: " + SharedVariables.sendUIPackets), button -> {
 
-                // tells the client if it should send any gui related packets
-                SharedVariables.sendUIPackets = !SharedVariables.sendUIPackets;
-                button.setMessage(Text.of("Send packets: " + SharedVariables.sendUIPackets));
-            }));
+                        // tells the client if it should send any gui related packets
+                        SharedVariables.sendUIPackets = !SharedVariables.sendUIPackets;
+                        button.setMessage(Text.of("Send packets: " + SharedVariables.sendUIPackets));
+                    })
+                            .position(5, 65)
+                            .size(160, 20)
+                            .build()
+            );
 
             // register "delay packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 95, 160, 20, Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Delay packets: " + SharedVariables.delayUIPackets), button -> {
 
-                // toggles a setting to delay all gui related packets to be used later when turning this setting off
-                SharedVariables.delayUIPackets = !SharedVariables.delayUIPackets;
-                button.setMessage(Text.of("Delay packets: " + SharedVariables.delayUIPackets));
-                if (!SharedVariables.delayUIPackets && !SharedVariables.delayedUIPackets.isEmpty()) {
-                    for (Packet<?> packet : SharedVariables.delayedUIPackets) {
-                        mc.getNetworkHandler().sendPacket(packet);
-                    }
-                    SharedVariables.delayedUIPackets.clear();
-                }
-            }));
+                        // toggles a setting to delay all gui related packets to be used later when turning this setting off
+                        SharedVariables.delayUIPackets = !SharedVariables.delayUIPackets;
+                        button.setMessage(Text.of("Delay packets: " + SharedVariables.delayUIPackets));
+                        if (!SharedVariables.delayUIPackets && !SharedVariables.delayedUIPackets.isEmpty()) {
+                            for (Packet<?> packet : SharedVariables.delayedUIPackets) {
+                                mc.getNetworkHandler().sendPacket(packet);
+                            }
+                            SharedVariables.delayedUIPackets.clear();
+                        }
+                    })
+                            .position(5, 95)
+                            .size(160, 20)
+                            .build()
+            );
 
             // register "save gui" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 125, 160, 20, Text.of("Save GUI"), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Save GUI" + SharedVariables.sendUIPackets), button -> {
 
-                // saves the current gui to a variable to be accessed later
-                SharedVariables.storedScreen = mc.currentScreen;
-                SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
-            }));
+                        // saves the current gui to a variable to be accessed later
+                        SharedVariables.storedScreen = mc.currentScreen;
+                        SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
+                    })
+                            .position(5, 125)
+                            .size(160, 20)
+                            .build()
+            );
 
             // register "disconnect and send packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 155, 200, 20, Text.of("Disconnect and send packets"), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Disconnect and send packets" + SharedVariables.sendUIPackets), button -> {
 
-                // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
-                if (!SharedVariables.delayedUIPackets.isEmpty()) {
-                    SharedVariables.delayUIPackets = false;
-                    for (Packet<?> packet : SharedVariables.delayedUIPackets) {
-                        mc.getNetworkHandler().sendPacket(packet);
-                    }
-                    mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
-                    SharedVariables.delayedUIPackets.clear();
-                }
-            }));
+                        // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
+                        if (!SharedVariables.delayedUIPackets.isEmpty()) {
+                            SharedVariables.delayUIPackets = false;
+                            for (Packet<?> packet : SharedVariables.delayedUIPackets) {
+                                mc.getNetworkHandler().sendPacket(packet);
+                            }
+                            mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
+                            SharedVariables.delayedUIPackets.clear();
+                        }
+                    })
+                            .position(5, 155)
+                            .size(200, 20)
+                            .build()
+            );
 
             // register "fabricate packet" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 185, 200, 20, Text.of("Fabricate packet"), (button) -> {
+            addDrawableChild(
+                    new ButtonWidget.Builder(Text.literal("Fabricate packet" + SharedVariables.sendUIPackets), button -> {
 
-                // creates a gui allowing you to fabricate packets
+                        JFrame frame = new JFrame("Choose Packet");
 
-                JFrame frame = new JFrame("Choose Packet");
+                        JButton clickSlotButton = new JButton("Click Slot");
+                        clickSlotButton.setBounds(100, 25, 110, 20);
+                        clickSlotButton.setFocusable(false);
+                        clickSlotButton.addActionListener((event) -> {
+                            // im too lazy to comment everything here just read the code yourself
 
-                JButton clickSlotButton = new JButton("Click Slot");
-                clickSlotButton.setBounds(100, 25, 110, 20);
-                clickSlotButton.setFocusable(false);
-                clickSlotButton.addActionListener((event) -> {
-                    // im too lazy to comment everything here just read the code yourself
+                            frame.setVisible(false);
 
-                    frame.setVisible(false);
+                            JFrame clickSlotFrame = new JFrame("Click Slot Packet");
 
-                    JFrame clickSlotFrame = new JFrame("Click Slot Packet");
+                            JLabel syncIdLabel = new JLabel("Sync Id:");
+                            syncIdLabel.setFocusable(false);
+                            syncIdLabel.setBounds(25, 25, 100, 20);
 
-                    JLabel syncIdLabel = new JLabel("Sync Id:");
-                    syncIdLabel.setFocusable(false);
-                    syncIdLabel.setBounds(25, 25, 100, 20);
+                            JLabel revisionLabel = new JLabel("Revision:");
+                            revisionLabel.setFocusable(false);
+                            revisionLabel.setBounds(25, 50, 100, 20);
 
-                    JLabel revisionLabel = new JLabel("Revision:");
-                    revisionLabel.setFocusable(false);
-                    revisionLabel.setBounds(25, 50, 100, 20);
+                            JLabel slotLabel = new JLabel("Slot:");
+                            slotLabel.setFocusable(false);
+                            slotLabel.setBounds(25, 75, 100, 20);
 
-                    JLabel slotLabel = new JLabel("Slot:");
-                    slotLabel.setFocusable(false);
-                    slotLabel.setBounds(25, 75, 100, 20);
+                            JLabel buttonLabel = new JLabel("Button:");
+                            buttonLabel.setFocusable(false);
+                            buttonLabel.setBounds(25, 100, 100, 20);
 
-                    JLabel buttonLabel = new JLabel("Button:");
-                    buttonLabel.setFocusable(false);
-                    buttonLabel.setBounds(25, 100, 100, 20);
+                            JLabel actionLabel = new JLabel("Action:");
+                            actionLabel.setFocusable(false);
+                            actionLabel.setBounds(25, 125, 100, 20);
 
-                    JLabel actionLabel = new JLabel("Action:");
-                    actionLabel.setFocusable(false);
-                    actionLabel.setBounds(25, 125, 100, 20);
+                            JTextField syncIdField = new JTextField(1);
+                            syncIdField.setBounds(125, 25, 100, 20);
 
-                    JTextField syncIdField = new JTextField(1);
-                    syncIdField.setBounds(125, 25, 100, 20);
+                            JTextField revisionField = new JTextField(1);
+                            revisionField.setBounds(125, 50, 100, 20);
 
-                    JTextField revisionField = new JTextField(1);
-                    revisionField.setBounds(125, 50, 100, 20);
+                            JTextField slotField = new JTextField(1);
+                            slotField.setBounds(125, 75, 100, 20);
 
-                    JTextField slotField = new JTextField(1);
-                    slotField.setBounds(125, 75, 100, 20);
+                            JTextField buttonField = new JTextField(1);
+                            buttonField.setBounds(125, 100, 100, 20);
 
-                    JTextField buttonField = new JTextField(1);
-                    buttonField.setBounds(125, 100, 100, 20);
-
-                    JComboBox<String> actionField = new JComboBox<>();
-                    List<String> actions = ImmutableList.of(
-                            "PICKUP",
-                            "QUICK_MOVE",
-                            "SWAP",
-                            "CLONE",
-                            "THROW",
-                            "QUICK_CRAFT",
-                            "PICKUP_ALL"
-                    );
-                    actionField.setEditable(false);
-                    actionField.setFocusable(false);
-                    actionField.setBounds(125, 125, 100, 20);
-                    for (String action : actions) {
-                        actionField.addItem(action);
-                    }
-
-                    JLabel statusLabel = new JLabel();
-                    statusLabel.setForeground(Color.WHITE);
-                    statusLabel.setFocusable(false);
-                    statusLabel.setBounds(125, 150, 125, 20);
-
-                    JButton sendButton = new JButton("Send");
-                    sendButton.setFocusable(false);
-                    sendButton.setBounds(25, 150, 75, 20);
-                    sendButton.addActionListener((event0) -> {
-                        if (
-                                syncIdField.getText().isEmpty() ||
-                                        revisionField.getText().isEmpty() ||
-                                        slotField.getText().isEmpty() ||
-                                        buttonField.getText().isEmpty())
-                        {
-                            statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
-                            return;
-                        }
-                        if (
-                                MainClient.isInteger(syncIdField.getText()) &&
-                                        MainClient.isInteger(revisionField.getText()) &&
-                                        MainClient.isInteger(slotField.getText()) &&
-                                        MainClient.isInteger(buttonField.getText()) &&
-                                        actionField.getSelectedItem() != null)
-                        {
-                            int syncId = Integer.parseInt(syncIdField.getText());
-                            int revision = Integer.parseInt(revisionField.getText());
-                            int slot = Integer.parseInt(slotField.getText());
-                            int button0 = Integer.parseInt(buttonField.getText());
-                            SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
-
-                            if (action != null) {
-                                mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>()));
-                                statusLabel.setForeground(Color.GREEN.darker());
-                                statusLabel.setText("Sent successfully!");
-                                MainClient.queueTask(() -> {
-                                    statusLabel.setForeground(Color.WHITE);
-                                    statusLabel.setText("");
-                                }, 1500L);
-                            } else {
-                                statusLabel.setForeground(Color.RED.darker());
-                                statusLabel.setText("Invalid parameters!");
-                                MainClient.queueTask(() -> {
-                                    statusLabel.setForeground(Color.WHITE);
-                                    statusLabel.setText("");
-                                }, 1500L);
+                            JComboBox<String> actionField = new JComboBox<>();
+                            List<String> actions = ImmutableList.of(
+                                    "PICKUP",
+                                    "QUICK_MOVE",
+                                    "SWAP",
+                                    "CLONE",
+                                    "THROW",
+                                    "QUICK_CRAFT",
+                                    "PICKUP_ALL"
+                            );
+                            actionField.setEditable(false);
+                            actionField.setFocusable(false);
+                            actionField.setBounds(125, 125, 100, 20);
+                            for (String action : actions) {
+                                actionField.addItem(action);
                             }
-                        } else {
-                            statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
-                        }
-                    });
 
-                    clickSlotFrame.setBounds(0, 0, 450, 250);
-                    clickSlotFrame.setLayout(null);
-                    clickSlotFrame.setLocationRelativeTo(null);
-                    clickSlotFrame.add(syncIdLabel);
-                    clickSlotFrame.add(revisionLabel);
-                    clickSlotFrame.add(slotLabel);
-                    clickSlotFrame.add(buttonLabel);
-                    clickSlotFrame.add(actionLabel);
-                    clickSlotFrame.add(syncIdField);
-                    clickSlotFrame.add(revisionField);
-                    clickSlotFrame.add(slotField);
-                    clickSlotFrame.add(buttonField);
-                    clickSlotFrame.add(actionField);
-                    clickSlotFrame.add(sendButton);
-                    clickSlotFrame.add(statusLabel);
-                    clickSlotFrame.setVisible(true);
-                });
+                            JLabel statusLabel = new JLabel();
+                            statusLabel.setForeground(Color.WHITE);
+                            statusLabel.setFocusable(false);
+                            statusLabel.setBounds(125, 150, 125, 20);
 
-                JButton buttonClickButton = new JButton("Button Click");
-                buttonClickButton.setBounds(220, 25, 110, 20);
-                buttonClickButton.setFocusable(false);
-                buttonClickButton.addActionListener((event) -> {
-                    // im too lazy to comment everything here just read the code yourself
+                            JButton sendButton = new JButton("Send");
+                            sendButton.setFocusable(false);
+                            sendButton.setBounds(25, 150, 75, 20);
+                            sendButton.addActionListener((event0) -> {
+                                if (
+                                        syncIdField.getText().isEmpty() ||
+                                                revisionField.getText().isEmpty() ||
+                                                slotField.getText().isEmpty() ||
+                                                buttonField.getText().isEmpty())
+                                {
+                                    statusLabel.setForeground(Color.RED.darker());
+                                    statusLabel.setText("Invalid parameters!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                    return;
+                                }
+                                if (
+                                        MainClient.isInteger(syncIdField.getText()) &&
+                                                MainClient.isInteger(revisionField.getText()) &&
+                                                MainClient.isInteger(slotField.getText()) &&
+                                                MainClient.isInteger(buttonField.getText()) &&
+                                                actionField.getSelectedItem() != null)
+                                {
+                                    int syncId = Integer.parseInt(syncIdField.getText());
+                                    int revision = Integer.parseInt(revisionField.getText());
+                                    int slot = Integer.parseInt(slotField.getText());
+                                    int button0 = Integer.parseInt(buttonField.getText());
+                                    SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
 
-                    frame.setVisible(false);
+                                    if (action != null) {
+                                        mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>()));
+                                        statusLabel.setForeground(Color.GREEN.darker());
+                                        statusLabel.setText("Sent successfully!");
+                                        MainClient.queueTask(() -> {
+                                            statusLabel.setForeground(Color.WHITE);
+                                            statusLabel.setText("");
+                                        }, 1500L);
+                                    } else {
+                                        statusLabel.setForeground(Color.RED.darker());
+                                        statusLabel.setText("Invalid parameters!");
+                                        MainClient.queueTask(() -> {
+                                            statusLabel.setForeground(Color.WHITE);
+                                            statusLabel.setText("");
+                                        }, 1500L);
+                                    }
+                                } else {
+                                    statusLabel.setForeground(Color.RED.darker());
+                                    statusLabel.setText("Invalid parameters!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                }
+                            });
 
-                    JFrame buttonClickFrame = new JFrame("Button Click Packet");
+                            clickSlotFrame.setBounds(0, 0, 450, 250);
+                            clickSlotFrame.setLayout(null);
+                            clickSlotFrame.setLocationRelativeTo(null);
+                            clickSlotFrame.add(syncIdLabel);
+                            clickSlotFrame.add(revisionLabel);
+                            clickSlotFrame.add(slotLabel);
+                            clickSlotFrame.add(buttonLabel);
+                            clickSlotFrame.add(actionLabel);
+                            clickSlotFrame.add(syncIdField);
+                            clickSlotFrame.add(revisionField);
+                            clickSlotFrame.add(slotField);
+                            clickSlotFrame.add(buttonField);
+                            clickSlotFrame.add(actionField);
+                            clickSlotFrame.add(sendButton);
+                            clickSlotFrame.add(statusLabel);
+                            clickSlotFrame.setVisible(true);
+                        });
 
-                    JLabel syncIdLabel = new JLabel("Sync Id:");
-                    syncIdLabel.setFocusable(false);
-                    syncIdLabel.setBounds(25, 25, 100, 20);
+                        JButton buttonClickButton = new JButton("Button Click");
+                        buttonClickButton.setBounds(220, 25, 110, 20);
+                        buttonClickButton.setFocusable(false);
+                        buttonClickButton.addActionListener((event) -> {
+                            // im too lazy to comment everything here just read the code yourself
 
-                    JLabel buttonIdLabel = new JLabel("Button Id:");
-                    buttonIdLabel.setFocusable(false);
-                    buttonIdLabel.setBounds(25, 50, 100, 20);
+                            frame.setVisible(false);
 
-                    JTextField syncIdField = new JTextField(1);
-                    syncIdField.setBounds(125, 25, 100, 20);
+                            JFrame buttonClickFrame = new JFrame("Button Click Packet");
 
-                    JTextField buttonIdField = new JTextField(1);
-                    buttonIdField.setBounds(125, 50, 100, 20);
+                            JLabel syncIdLabel = new JLabel("Sync Id:");
+                            syncIdLabel.setFocusable(false);
+                            syncIdLabel.setBounds(25, 25, 100, 20);
 
-                    JLabel statusLabel = new JLabel();
-                    statusLabel.setForeground(Color.WHITE);
-                    statusLabel.setFocusable(false);
-                    statusLabel.setBounds(125, 150, 125, 20);
+                            JLabel buttonIdLabel = new JLabel("Button Id:");
+                            buttonIdLabel.setFocusable(false);
+                            buttonIdLabel.setBounds(25, 50, 100, 20);
 
-                    JButton sendButton = new JButton("Send");
-                    sendButton.setFocusable(false);
-                    sendButton.setBounds(25, 150, 75, 20);
-                    sendButton.addActionListener((event0) -> {
-                        if (syncIdField.getText().isEmpty() || buttonIdField.getText().isEmpty()) {
-                            statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
-                            return;
-                        }
-                        if (MainClient.isInteger(syncIdField.getText()) && MainClient.isInteger(buttonIdField.getText())) {
-                            int syncId = Integer.parseInt(syncIdField.getText());
-                            int buttonId = Integer.parseInt(buttonIdField.getText());
+                            JTextField syncIdField = new JTextField(1);
+                            syncIdField.setBounds(125, 25, 100, 20);
 
-                            mc.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(syncId, buttonId));
-                            statusLabel.setForeground(Color.GREEN.darker());
-                            statusLabel.setText("Sent successfully!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
-                        } else {
-                            statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
-                            MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
-                                statusLabel.setText("");
-                            }, 1500L);
-                        }
-                    });
+                            JTextField buttonIdField = new JTextField(1);
+                            buttonIdField.setBounds(125, 50, 100, 20);
 
-                    buttonClickFrame.setBounds(0, 0, 450, 250);
-                    buttonClickFrame.setLayout(null);
-                    buttonClickFrame.setLocationRelativeTo(null);
-                    buttonClickFrame.add(syncIdLabel);
-                    buttonClickFrame.add(buttonIdLabel);
-                    buttonClickFrame.add(syncIdField);
-                    buttonClickFrame.add(buttonIdField);
-                    buttonClickFrame.add(sendButton);
-                    buttonClickFrame.add(statusLabel);
-                    buttonClickFrame.setVisible(true);
-                });
+                            JLabel statusLabel = new JLabel();
+                            statusLabel.setForeground(Color.WHITE);
+                            statusLabel.setFocusable(false);
+                            statusLabel.setBounds(125, 150, 125, 20);
 
-                frame.setBounds(0, 0, 450, 100);
-                frame.setLayout(null);
-                frame.setLocationRelativeTo(null);
-                frame.add(clickSlotButton);
-                frame.add(buttonClickButton);
-                frame.setVisible(true);
-            }));
+                            JButton sendButton = new JButton("Send");
+                            sendButton.setFocusable(false);
+                            sendButton.setBounds(25, 150, 75, 20);
+                            sendButton.addActionListener((event0) -> {
+                                if (syncIdField.getText().isEmpty() || buttonIdField.getText().isEmpty()) {
+                                    statusLabel.setForeground(Color.RED.darker());
+                                    statusLabel.setText("Invalid parameters!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                    return;
+                                }
+                                if (MainClient.isInteger(syncIdField.getText()) && MainClient.isInteger(buttonIdField.getText())) {
+                                    int syncId = Integer.parseInt(syncIdField.getText());
+                                    int buttonId = Integer.parseInt(buttonIdField.getText());
+
+                                    mc.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(syncId, buttonId));
+                                    statusLabel.setForeground(Color.GREEN.darker());
+                                    statusLabel.setText("Sent successfully!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                } else {
+                                    statusLabel.setForeground(Color.RED.darker());
+                                    statusLabel.setText("Invalid parameters!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                }
+                            });
+
+                            buttonClickFrame.setBounds(0, 0, 450, 250);
+                            buttonClickFrame.setLayout(null);
+                            buttonClickFrame.setLocationRelativeTo(null);
+                            buttonClickFrame.add(syncIdLabel);
+                            buttonClickFrame.add(buttonIdLabel);
+                            buttonClickFrame.add(syncIdField);
+                            buttonClickFrame.add(buttonIdField);
+                            buttonClickFrame.add(sendButton);
+                            buttonClickFrame.add(statusLabel);
+                            buttonClickFrame.setVisible(true);
+                        });
+
+                        frame.setBounds(0, 0, 450, 100);
+                        frame.setLayout(null);
+                        frame.setLocationRelativeTo(null);
+                        frame.add(clickSlotButton);
+                        frame.add(buttonClickButton);
+                        frame.setVisible(true);
+
+                    })
+                            .position(5, 185)
+                            .size(200, 20)
+                            .build()
+            );
         }
     }
 
@@ -342,4 +374,6 @@ public class BookScreenMixin extends Screen {
             MainClient.renderHandledScreen(mc, textRenderer, matrices);
         }
     }
+
+    ButtonWidget.NarrationSupplier test = textSupplier -> null;
 }
