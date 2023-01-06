@@ -1,6 +1,5 @@
 # UI-Utils
-Dupe hunting mod for 1.19.2. Incompatible with mac
-
+Dupe hunting mod for 1.19.2. Incompatible with mac, needs fabric api
 ---
 
 - How to use:
