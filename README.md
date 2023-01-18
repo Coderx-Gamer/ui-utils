@@ -1,5 +1,5 @@
 # UI-Utils
-Dupe hunting mod for 1.19.2. Incompatible with mac
+Dupe hunting mod for 1.19.3. Incompatible with mac, updated by stefexec.
 
 ---
 

@@ -95,7 +95,7 @@ public class HandledScreenMixin extends Screen {
 
         // register "save gui" button in LecternScreen
         addDrawableChild(
-                new ButtonWidget.Builder(Text.literal("Save GUI" + SharedVariables.sendUIPackets), button -> {
+                new ButtonWidget.Builder(Text.literal("Save GUI"), button -> {
 
                     // saves the current gui to a variable to be accessed later
                     SharedVariables.storedScreen = mc.currentScreen;
@@ -108,7 +108,7 @@ public class HandledScreenMixin extends Screen {
 
         // register "disconnect and send packets" button in LecternScreen
         addDrawableChild(
-                new ButtonWidget.Builder(Text.literal("Disconnect and send packets" + SharedVariables.sendUIPackets), button -> {
+                new ButtonWidget.Builder(Text.literal("Disconnect and send packets"), button -> {
 
                     // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
                     if (!SharedVariables.delayedUIPackets.isEmpty()) {
@@ -127,7 +127,7 @@ public class HandledScreenMixin extends Screen {
 
         // register "fabricate packet" button in LecternScreen
         addDrawableChild(
-                new ButtonWidget.Builder(Text.literal("Fabricate packet" + SharedVariables.sendUIPackets), button -> {
+                new ButtonWidget.Builder(Text.literal("Fabricate packet"), button -> {
 
                     JFrame frame = new JFrame("Choose Packet");
 
