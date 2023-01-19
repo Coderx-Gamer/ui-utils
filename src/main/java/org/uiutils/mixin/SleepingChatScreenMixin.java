@@ -15,17 +15,16 @@ public class SleepingChatScreenMixin extends Screen {
         super(title);
     }
 
-
     // called when SleepingChatScreen is created
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
 
         // register "client wake up" button for SleepingChatScreen
-        addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Client wake up"), (button) -> {
+        addDrawableChild(ButtonWidget.builder(Text.of("Client wake up"), (button) -> {
 
             // wakes the player up client-side
             client.player.wakeUp();
             client.setScreen(null);
-        }));
+        }).width(160).position(5, 5).build());
     }
 }

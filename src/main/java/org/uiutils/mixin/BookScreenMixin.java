@@ -40,32 +40,31 @@ public class BookScreenMixin extends Screen {
 
         // check if the current gui is a lectern gui
         if ((Object) this instanceof LecternScreen) {
-            // copied from HandledScreenMixin.init()
 
-            // register "close without packet" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Close without packet"), (button) -> {
+            // register "close without packet" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
 
                 // closes the current gui without sending a packet to the current server
                 mc.setScreen(null);
-            }));
+            }).width(160).position(5, 5).build());
 
-            // register "de-sync" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 35, 90, 20, Text.of("De-sync"), (button) -> {
+            // register "de-sync" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("De-sync"), (button) -> {
 
                 // keeps the current gui open client-side and closed server-side
                 mc.getNetworkHandler().sendPacket(new CloseHandledScreenC2SPacket(mc.player.currentScreenHandler.syncId));
-            }));
+            }).width(90).position(5, 35).build());
 
-            // register "send packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 65, 160, 20, Text.of("Send packets: " + SharedVariables.sendUIPackets), (button) -> {
+            // register "send packets" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Send packets: " + SharedVariables.sendUIPackets), (button) -> {
 
                 // tells the client if it should send any gui related packets
                 SharedVariables.sendUIPackets = !SharedVariables.sendUIPackets;
                 button.setMessage(Text.of("Send packets: " + SharedVariables.sendUIPackets));
-            }));
+            }).width(160).position(5, 65).build());
 
-            // register "delay packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 95, 160, 20, Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
+            // register "delay packets" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
 
                 // toggles a setting to delay all gui related packets to be used later when turning this setting off
                 SharedVariables.delayUIPackets = !SharedVariables.delayUIPackets;
@@ -76,18 +75,18 @@ public class BookScreenMixin extends Screen {
                     }
                     SharedVariables.delayedUIPackets.clear();
                 }
-            }));
+            }).width(160).position(5, 95).build());
 
-            // register "save gui" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 125, 160, 20, Text.of("Save GUI"), (button) -> {
+            // register "save gui" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Save GUI"), (button) -> {
 
                 // saves the current gui to a variable to be accessed later
                 SharedVariables.storedScreen = mc.currentScreen;
                 SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
-            }));
+            }).width(160).position(5, 125).build());
 
-            // register "disconnect and send packets" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 155, 200, 20, Text.of("Disconnect and send packets"), (button) -> {
+            // register "disconnect and send packets" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Disconnect and send packets"), (button) -> {
 
                 // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
                 if (!SharedVariables.delayedUIPackets.isEmpty()) {
@@ -98,10 +97,10 @@ public class BookScreenMixin extends Screen {
                     mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
                     SharedVariables.delayedUIPackets.clear();
                 }
-            }));
+            }).width(200).position(5, 155).build());
 
-            // register "fabricate packet" button in LecternScreen
-            addDrawableChild(new ButtonWidget(5, 185, 200, 20, Text.of("Fabricate packet"), (button) -> {
+            // register "fabricate packet" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
 
                 // creates a gui allowing you to fabricate packets
 
@@ -327,7 +326,7 @@ public class BookScreenMixin extends Screen {
                 frame.add(clickSlotButton);
                 frame.add(buttonClickButton);
                 frame.setVisible(true);
-            }));
+            }).width(200).position(5, 185).build());
         }
     }
 

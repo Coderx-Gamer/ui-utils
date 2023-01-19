@@ -24,11 +24,11 @@ public class SignEditScreenMixin extends Screen {
     public void init(CallbackInfo ci) {
 
         // register "close without packet" button for SignEditScreen
-        addDrawableChild(new ButtonWidget(5, 5, 160, 20, Text.of("Close without packet"), (button) -> {
+        addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
 
             // disables sign editing and closes the current gui without sending a packet
             SharedVariables.shouldEditSign = false;
             mc.setScreen(null);
-        }));
+        }).width(160).position(5, 5).build());
     }
 }

@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "UI Utils",
-  "description": "funny gui mod that does funny stuff",
+  "description": "Dupe hunting mod.",
   "authors": [
     "Coderx_Gamer"
   ],
@@ -27,7 +27,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
+    "fabricloader": ">=0.14.13",
     "fabric": "*",
     "minecraft": "~1.19",
     "java": ">=17"
