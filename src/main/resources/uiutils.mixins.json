@@ -8,7 +8,8 @@
     "HandledScreenMixin",
     "BookScreenMixin",
     "SignEditScreenMixin",
-    "SleepingChatScreenMixin"
+    "SleepingChatScreenMixin",
+    "ItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
