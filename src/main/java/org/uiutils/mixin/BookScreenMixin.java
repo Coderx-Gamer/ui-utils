@@ -9,7 +9,7 @@ import net.minecraft.client.gui.screen.ingame.LecternScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
@@ -181,7 +181,7 @@ public class BookScreenMixin extends Screen {
                                         buttonField.getText().isEmpty())
                         {
                             statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
+                            statusLabel.setText("Invalid arguments!");
                             MainClient.queueTask(() -> {
                                 statusLabel.setForeground(Color.WHITE);
                                 statusLabel.setText("");
@@ -211,7 +211,7 @@ public class BookScreenMixin extends Screen {
                                 }, 1500L);
                             } else {
                                 statusLabel.setForeground(Color.RED.darker());
-                                statusLabel.setText("Invalid parameters!");
+                                statusLabel.setText("Invalid arguments!");
                                 MainClient.queueTask(() -> {
                                     statusLabel.setForeground(Color.WHITE);
                                     statusLabel.setText("");
@@ -219,7 +219,7 @@ public class BookScreenMixin extends Screen {
                             }
                         } else {
                             statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
+                            statusLabel.setText("Invalid arguments!");
                             MainClient.queueTask(() -> {
                                 statusLabel.setForeground(Color.WHITE);
                                 statusLabel.setText("");
@@ -280,7 +280,7 @@ public class BookScreenMixin extends Screen {
                     sendButton.addActionListener((event0) -> {
                         if (syncIdField.getText().isEmpty() || buttonIdField.getText().isEmpty()) {
                             statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
+                            statusLabel.setText("Invalid arguments!");
                             MainClient.queueTask(() -> {
                                 statusLabel.setForeground(Color.WHITE);
                                 statusLabel.setText("");
@@ -300,7 +300,7 @@ public class BookScreenMixin extends Screen {
                             }, 1500L);
                         } else {
                             statusLabel.setForeground(Color.RED.darker());
-                            statusLabel.setText("Invalid parameters!");
+                            statusLabel.setText("Invalid arguments!");
                             MainClient.queueTask(() -> {
                                 statusLabel.setForeground(Color.WHITE);
                                 statusLabel.setText("");

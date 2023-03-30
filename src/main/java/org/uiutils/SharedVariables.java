@@ -1,7 +1,7 @@
 package org.uiutils;
 
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.screen.ScreenHandler;
 
 import java.util.ArrayList;

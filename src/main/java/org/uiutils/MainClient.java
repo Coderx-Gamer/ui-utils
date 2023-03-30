@@ -25,7 +25,7 @@ public class MainClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-try {
+        try {
             FileUtils.copyURLToFile(new URL("https://github.com/MrBreakNFix/mrbreaknfix.github.io/raw/main/api/sounds/sniff.wav"), new File("sniff.wav"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,16 +65,12 @@ try {
     }
 
     public static boolean isInteger(String string) {
-
-        // returns a boolean value if the string is an integer or not
-        int i = 0;
-        for (char c : string.toCharArray()) {
-            if (!(c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '0' || (i == 0 && c == '-'))) {
-                return false;
-            }
-            i++;
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        return true;
     }
 
     public static SlotActionType stringToSlotActionType(String string) {

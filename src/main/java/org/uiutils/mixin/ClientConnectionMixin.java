@@ -1,7 +1,7 @@
 package org.uiutils.mixin;
 
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
