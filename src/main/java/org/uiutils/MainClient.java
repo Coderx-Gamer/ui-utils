@@ -62,6 +62,7 @@ public class MainClient implements ClientModInitializer {
         // display the current gui's sync id and revision
         textRenderer.draw(matrices, "Sync Id: " + mc.player.currentScreenHandler.syncId, 200, 5, Color.WHITE.getRGB());
         textRenderer.draw(matrices, "Revision: " + mc.player.currentScreenHandler.getRevision(), 200, 35, Color.WHITE.getRGB());
+        textRenderer.draw(matrices, "UI-Utils made by Coderx Gamer.", 10, mc.currentScreen.height - 30, Color.WHITE.getRGB());
     }
 
     public static boolean isInteger(String string) {

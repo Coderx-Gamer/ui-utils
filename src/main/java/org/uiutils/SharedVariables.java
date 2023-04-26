@@ -15,4 +15,6 @@ public class SharedVariables {
 
     public static Screen storedScreen = null;
     public static ScreenHandler storedScreenHandler = null;
+
+    public static boolean enabled = true;
 }

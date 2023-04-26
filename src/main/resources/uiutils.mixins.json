@@ -9,7 +9,9 @@
     "BookScreenMixin",
     "SignEditScreenMixin",
     "SleepingChatScreenMixin",
-    "ItemMixin"
+    "ItemMixin",
+    "ChatScreenMixin",
+    "accessor.ClientConnectionAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

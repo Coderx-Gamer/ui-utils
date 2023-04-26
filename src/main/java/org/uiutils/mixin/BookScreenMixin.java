@@ -21,9 +21,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.uiutils.MainClient;
 import org.uiutils.SharedVariables;
+import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.List;
 
 @Mixin(BookScreen.class)
@@ -38,15 +40,15 @@ public class BookScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
 
-        // check if the current gui is a lectern gui
-        if ((Object) this instanceof LecternScreen) {
+        // check if the current gui is a lectern gui and ui-utils is enabled
+        if ((Object) this instanceof LecternScreen && SharedVariables.enabled) {
 
             // register "close without packet" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
 
                 // closes the current gui without sending a packet to the current server
                 mc.setScreen(null);
-            }).width(160).position(5, 5).build());
+            }).width(110).position(5, 5).build());
 
             // register "de-sync" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("De-sync"), (button) -> {
@@ -61,7 +63,7 @@ public class BookScreenMixin extends Screen {
                 // tells the client if it should send any gui related packets
                 SharedVariables.sendUIPackets = !SharedVariables.sendUIPackets;
                 button.setMessage(Text.of("Send packets: " + SharedVariables.sendUIPackets));
-            }).width(160).position(5, 65).build());
+            }).width(115).position(5, 65).build());
 
             // register "delay packets" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Delay packets: " + SharedVariables.delayUIPackets), (button) -> {
@@ -75,7 +77,7 @@ public class BookScreenMixin extends Screen {
                     }
                     SharedVariables.delayedUIPackets.clear();
                 }
-            }).width(160).position(5, 95).build());
+            }).width(115).position(5, 95).build());
 
             // register "save gui" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Save GUI"), (button) -> {
@@ -83,7 +85,7 @@ public class BookScreenMixin extends Screen {
                 // saves the current gui to a variable to be accessed later
                 SharedVariables.storedScreen = mc.currentScreen;
                 SharedVariables.storedScreenHandler = mc.player.currentScreenHandler;
-            }).width(160).position(5, 125).build());
+            }).width(85).position(5, 125).build());
 
             // register "disconnect and send packets" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Disconnect and send packets"), (button) -> {
@@ -97,7 +99,7 @@ public class BookScreenMixin extends Screen {
                     mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
                     SharedVariables.delayedUIPackets.clear();
                 }
-            }).width(200).position(5, 155).build());
+            }).width(160).position(5, 155).build());
 
             // register "fabricate packet" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
@@ -168,7 +170,12 @@ public class BookScreenMixin extends Screen {
                     JLabel statusLabel = new JLabel();
                     statusLabel.setForeground(Color.WHITE);
                     statusLabel.setFocusable(false);
-                    statusLabel.setBounds(125, 150, 125, 20);
+                    statusLabel.setBounds(185, 150, 190, 20);
+
+                    JCheckBox delayBox = new JCheckBox("Delay");
+                    delayBox.setBounds(115, 150, 85, 20);
+                    delayBox.setSelected(false);
+                    delayBox.setFocusable(false);
 
                     JButton sendButton = new JButton("Send");
                     sendButton.setFocusable(false);
@@ -202,7 +209,22 @@ public class BookScreenMixin extends Screen {
                             SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
 
                             if (action != null) {
-                                mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>()));
+                                ClickSlotC2SPacket packet = new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>());
+                                try {
+                                    if (delayBox.isSelected()) {
+                                        mc.getNetworkHandler().sendPacket(packet);
+                                    } else {
+                                        ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                                    }
+                                } catch (Exception e) {
+                                    statusLabel.setForeground(Color.RED.darker());
+                                    statusLabel.setText("You must be connected to a server!");
+                                    MainClient.queueTask(() -> {
+                                        statusLabel.setForeground(Color.WHITE);
+                                        statusLabel.setText("");
+                                    }, 1500L);
+                                    return;
+                                }
                                 statusLabel.setForeground(Color.GREEN.darker());
                                 statusLabel.setText("Sent successfully!");
                                 MainClient.queueTask(() -> {
@@ -242,6 +264,7 @@ public class BookScreenMixin extends Screen {
                     clickSlotFrame.add(actionField);
                     clickSlotFrame.add(sendButton);
                     clickSlotFrame.add(statusLabel);
+                    clickSlotFrame.add(delayBox);
                     clickSlotFrame.setVisible(true);
                 });
 
@@ -272,11 +295,16 @@ public class BookScreenMixin extends Screen {
                     JLabel statusLabel = new JLabel();
                     statusLabel.setForeground(Color.WHITE);
                     statusLabel.setFocusable(false);
-                    statusLabel.setBounds(125, 150, 125, 20);
+                    statusLabel.setBounds(185, 95, 190, 20);
+
+                    JCheckBox delayBox = new JCheckBox("Delay");
+                    delayBox.setBounds(115, 95, 85, 20);
+                    delayBox.setSelected(false);
+                    delayBox.setFocusable(false);
 
                     JButton sendButton = new JButton("Send");
                     sendButton.setFocusable(false);
-                    sendButton.setBounds(25, 150, 75, 20);
+                    sendButton.setBounds(25, 95, 75, 20);
                     sendButton.addActionListener((event0) -> {
                         if (syncIdField.getText().isEmpty() || buttonIdField.getText().isEmpty()) {
                             statusLabel.setForeground(Color.RED.darker());
@@ -291,7 +319,22 @@ public class BookScreenMixin extends Screen {
                             int syncId = Integer.parseInt(syncIdField.getText());
                             int buttonId = Integer.parseInt(buttonIdField.getText());
 
-                            mc.getNetworkHandler().sendPacket(new ButtonClickC2SPacket(syncId, buttonId));
+                            ButtonClickC2SPacket packet = new ButtonClickC2SPacket(syncId, buttonId);
+                            try {
+                                if (delayBox.isSelected()) {
+                                    mc.getNetworkHandler().sendPacket(packet);
+                                } else {
+                                    ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                                }
+                            } catch (Exception e) {
+                                statusLabel.setForeground(Color.RED.darker());
+                                statusLabel.setText("You must be connected to a server!");
+                                MainClient.queueTask(() -> {
+                                    statusLabel.setForeground(Color.WHITE);
+                                    statusLabel.setText("");
+                                }, 1500L);
+                                return;
+                            }
                             statusLabel.setForeground(Color.GREEN.darker());
                             statusLabel.setText("Sent successfully!");
                             MainClient.queueTask(() -> {
@@ -308,7 +351,7 @@ public class BookScreenMixin extends Screen {
                         }
                     });
 
-                    buttonClickFrame.setBounds(0, 0, 450, 250);
+                    buttonClickFrame.setBounds(0, 0, 450, 180);
                     buttonClickFrame.setLayout(null);
                     buttonClickFrame.setLocationRelativeTo(null);
                     buttonClickFrame.add(syncIdLabel);
@@ -317,6 +360,7 @@ public class BookScreenMixin extends Screen {
                     buttonClickFrame.add(buttonIdField);
                     buttonClickFrame.add(sendButton);
                     buttonClickFrame.add(statusLabel);
+                    buttonClickFrame.add(delayBox);
                     buttonClickFrame.setVisible(true);
                 });
 
@@ -326,7 +370,15 @@ public class BookScreenMixin extends Screen {
                 frame.add(clickSlotButton);
                 frame.add(buttonClickButton);
                 frame.setVisible(true);
-            }).width(200).position(5, 185).build());
+            }).width(120).position(5, 185).build());
+
+            addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
+                try {
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serializer.toJson(mc.currentScreen.getTitle())), null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).width(120).position(5, 215).build());
         }
     }
 
@@ -334,8 +386,8 @@ public class BookScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "render")
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 
-        // check if the current gui is a lectern gui
-        if ((Object) this instanceof LecternScreen) {
+        // check if the current gui is a lectern gui and if ui-utils is enabled
+        if ((Object) this instanceof LecternScreen && SharedVariables.enabled) {
 
             // display sync id and revision
             MainClient.renderHandledScreen(mc, textRenderer, matrices);
