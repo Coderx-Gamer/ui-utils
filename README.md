@@ -2,7 +2,7 @@
 Dupe hunting mod. Incompatible with mac, needs fabric api
 ---
 
-- How to use:
+# How to use:
 ---
 
 - Open any inventory/container with the mod and you should see a few buttons.
@@ -92,6 +92,16 @@ Dupe hunting mod. Incompatible with mac, needs fabric api
 
 ![image](https://user-images.githubusercontent.com/85349822/187432690-950626ac-7aef-4e46-8da1-1d294fcb9975.png)
 
+---
+
+# "Copy GUI Title JSON" button:
+---
+- Copies the JSON format of your current GUI's title (e.g. if you have a GUI called "Server Shop" open, it will copy " {"text":"Server Shop"} " to your clipboard, or, if you have a normal chest open, it will copy " {"translate":"container.chest"} " to your clipboard).
+---
+
+# "^toggleuiutils" command:
+---
+- Enables/Disables UI-Utils in-game GUI rendering.
 ---
 
 That's all the features for this mod currently, there may be more updates in the future but I cannot guarantee.
