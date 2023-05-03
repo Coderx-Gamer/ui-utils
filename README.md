@@ -106,4 +106,6 @@ Dupe hunting mod. Incompatible with mac, needs fabric api
 
 This mod concept is not an original idea, there are similar mods out there that have similar features, the goal of this mod is to be on the latest version and have some additional features.
 
+Some images here may be outdated.
+
 That's all the features for this mod currently, there may be more updates in the future but I cannot guarantee.
