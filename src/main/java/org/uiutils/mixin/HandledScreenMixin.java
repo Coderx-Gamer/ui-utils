@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -38,6 +40,7 @@ public class HandledScreenMixin extends Screen {
     }
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private TextFieldWidget chatCommandField;
 
     // called when creating a HandledScreen
     @Inject(at = @At("TAIL"), method = "init")
@@ -378,6 +381,29 @@ public class HandledScreenMixin extends Screen {
                     e.printStackTrace();
                 }
             }).width(120).position(5, 215).build());
+
+            // register "chat command" input in all HandledScreens
+            chatCommandField = new TextFieldWidget(mc.textRenderer, screenWidth - 170, 5, 110, 20, Text.of(""));
+            chatCommandField.setMaxLength(256);
+            chatCommandField.setSuggestion("Command");
+            chatCommandField.setChangedListener((text) -> {
+                if (text.isEmpty()) {
+                    chatCommandField.setSuggestion("Command");
+                } else {
+                    chatCommandField.setSuggestion("");
+                }
+            });
+            addDrawableChild(chatCommandField);
+
+            // register "send" button in all HandledScreens
+            addDrawableChild(ButtonWidget.builder(Text.of("Send"), (button) -> {
+                String chatCommand = chatCommandField.getText().trim();
+                if (!chatCommand.isEmpty()) {
+                    mc.getNetworkHandler().sendChatCommand(chatCommand);
+                    chatCommandField.setText("");
+                }
+            }).width(50).position(screenWidth - 55, 5).build());
+
         }
     }
 
@@ -389,5 +415,26 @@ public class HandledScreenMixin extends Screen {
             // display sync id and revision
             MainClient.renderHandledScreen(mc, textRenderer, matrices);
         }
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Close inventory with E keypress while chatCommandField isn't focused
+        if (keyCode == GLFW.GLFW_KEY_E && !chatCommandField.isFocused()) {
+            return super.keyPressed(GLFW.GLFW_KEY_ESCAPE, scanCode, modifiers);
+        }
+
+        //Allow backspace while focused on chatCommandField
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && chatCommandField.isFocused()) {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        // Allow closing of inventory with ESC
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE ) {
+            return super.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        // If keypresses were allowed here, all keys would work while in opened UIs
+        return true;
     }
 }
