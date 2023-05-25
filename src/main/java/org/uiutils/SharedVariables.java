@@ -7,6 +7,8 @@ import net.minecraft.screen.ScreenHandler;
 import java.util.ArrayList;
 
 public class SharedVariables {
+    public static boolean osIsMac = false;
+
     public static boolean sendUIPackets = true;
     public static boolean delayUIPackets = false;
     public static boolean shouldEditSign = true;

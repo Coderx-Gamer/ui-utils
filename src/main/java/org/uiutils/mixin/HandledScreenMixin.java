@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -103,7 +104,7 @@ public class HandledScreenMixin extends Screen {
             }).width(160).position(5, 155).build());
 
             // register "fabricate packet" button in all HandledScreens
-            addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
+            ButtonWidget fabricatePacket = addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
 
                 // creates a gui allowing you to fabricate packets
 
@@ -370,6 +371,8 @@ public class HandledScreenMixin extends Screen {
                 frame.add(buttonClickButton);
                 frame.setVisible(true);
             }).width(120).position(5, 185).build());
+
+            if(SharedVariables.osIsMac) fabricatePacket.active = false;
 
             addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
                 try {
