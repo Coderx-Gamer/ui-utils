@@ -54,7 +54,7 @@ public class MainClient implements ClientModInitializer {
         });
 
         // set java.awt.headless to false (allows for jframe guis to be used)
-        if(!(SharedVariables.osIsMac))System.setProperty("java.awt.headless", "false");
+        if(!SharedVariables.osIsMac) System.setProperty("java.awt.headless", "false");
 
         try {
 
