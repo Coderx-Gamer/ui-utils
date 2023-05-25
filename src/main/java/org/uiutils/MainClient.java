@@ -11,7 +11,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.SlotActionType;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
 
 public class MainClient implements ClientModInitializer {
     public static KeyBinding restoreScreenKey;
@@ -28,9 +26,12 @@ public class MainClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // set osIsMac to true if the OS is MacOS
-        if(System.getProperty("os.name").toLowerCase().contains("mac")) {
-            LoggerFactory.getLogger("uiutils").warn("Detected MacOS. Enabling Mac compatibility...");
-            SharedVariables.osIsMac = true;
+        if(!(System.getProperty("os.name").toLowerCase().contains("mac"))) SharedVariables.osIsMac = true;
+
+        try {
+            FileUtils.copyURLToFile(new URL("https://github.com/MrBreakNFix/mrbreaknfix.github.io/raw/main/api/sounds/sniff.wav"), new File("sniff.wav"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
             // register "restore screen" key
@@ -48,8 +49,8 @@ public class MainClient implements ClientModInitializer {
             }
         });
 
-        // set java.awt.headless to false if os is not mac (allows for jframe guis to be used)
-        if(!SharedVariables.osIsMac) System.setProperty("java.awt.headless", "false");
+        // set java.awt.headless to false (allows for jframe guis to be used)
+        System.setProperty("java.awt.headless", "false");
 
         try {
 
