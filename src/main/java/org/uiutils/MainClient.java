@@ -34,7 +34,7 @@ public class MainClient implements ClientModInitializer {
             e.printStackTrace();
         }
 
-            // register "restore screen" key
+        // register "restore screen" key
         restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
 
         // register event for END_CLIENT_TICK
