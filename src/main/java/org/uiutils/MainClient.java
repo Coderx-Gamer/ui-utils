@@ -26,13 +26,8 @@ public class MainClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // set osIsMac to true if the OS is MacOS
-        if(!(System.getProperty("os.name").toLowerCase().contains("mac"))) SharedVariables.osIsMac = true;
+        if(System.getProperty("os.name").toLowerCase().contains("mac")) SharedVariables.osIsMac = true;
 
-        try {
-            FileUtils.copyURLToFile(new URL("https://github.com/MrBreakNFix/mrbreaknfix.github.io/raw/main/api/sounds/sniff.wav"), new File("sniff.wav"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         // register "restore screen" key
         restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
