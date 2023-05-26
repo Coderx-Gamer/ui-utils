@@ -46,7 +46,8 @@ public class HandledScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
         if (SharedVariables.enabled) {
-
+            int screenWidth = width;
+            
             // register "close without packet" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
 
