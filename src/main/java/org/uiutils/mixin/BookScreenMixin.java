@@ -15,6 +15,7 @@ import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -372,15 +373,13 @@ public class BookScreenMixin extends Screen {
                 frame.setVisible(true);
             }).width(120).position(5, 185).build());
 
-            ButtonWidget copyGuiTitleJson = addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
+            addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
                 try {
-                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serializer.toJson(mc.currentScreen.getTitle())), null);
+                    GLFW.glfwSetClipboardString(MinecraftClient.getInstance().getWindow().getHandle(), Text.Serializer.toJson(mc.currentScreen.getTitle()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }).width(120).position(5, 215).build());
-
-            if(SharedVariables.osIsMac) copyGuiTitleJson.active = false;
         }
     }
 
