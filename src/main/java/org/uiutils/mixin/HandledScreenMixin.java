@@ -371,7 +371,7 @@ public class HandledScreenMixin extends Screen {
                 frame.setVisible(true);
             }).width(120).position(5, 185).build());
 
-            ButtonWidget copyGuiTitleJon =  addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
+            ButtonWidget copyGuiTitleJson =  addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
                 try {
                     Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serializer.toJson(mc.currentScreen.getTitle())), null);
                 } catch (Exception e) {
@@ -381,7 +381,7 @@ public class HandledScreenMixin extends Screen {
 
             if(SharedVariables.osIsMac) {
                 fabricatePacket.active = false;
-                copyGuiTitleJon.active = false;
+                copyGuiTitleJson.active = false;
             }
         }
     }
