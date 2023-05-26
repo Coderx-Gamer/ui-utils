@@ -47,7 +47,7 @@ public class HandledScreenMixin extends Screen {
     public void init(CallbackInfo ci) {
         if (SharedVariables.enabled) {
             int screenWidth = width;
-            
+
             // register "close without packet" button in all HandledScreens
             addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
 
@@ -431,7 +431,7 @@ public class HandledScreenMixin extends Screen {
         }
 
         // Allow closing of inventory with ESC
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE ) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_Q) {
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
 
