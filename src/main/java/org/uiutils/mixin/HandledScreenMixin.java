@@ -430,8 +430,8 @@ public class HandledScreenMixin extends Screen {
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
 
-        // Allow closing of inventory with ESC
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_Q) {
+        //if esc or e or f or 0-9
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_Q || keyCode == GLFW.GLFW_KEY_E || keyCode == GLFW.GLFW_KEY_F || (keyCode >= GLFW.GLFW_KEY_0 && keyCode <= GLFW.GLFW_KEY_9)) {
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
 
