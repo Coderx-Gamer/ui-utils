@@ -1,5 +1,6 @@
 package org.uiutils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -8,9 +9,12 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.GLFW;
+import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +26,8 @@ import java.util.TimerTask;
 
 public class MainClient implements ClientModInitializer {
     public static KeyBinding restoreScreenKey;
+    public static KeyBinding sendKey;
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     @Override
     public void onInitializeClient() {
@@ -32,6 +38,7 @@ public class MainClient implements ClientModInitializer {
         }
         // register "restore screen" key
         restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
+        sendKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Send Packet", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_B, "UI Utils"));
 
         // register event for END_CLIENT_TICK
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
@@ -42,6 +49,11 @@ public class MainClient implements ClientModInitializer {
                     client.setScreen(SharedVariables.storedScreen);
                     client.player.currentScreenHandler = SharedVariables.storedScreenHandler;
                 }
+            }
+
+            while (sendKey.wasPressed()) {
+                ClickSlotC2SPacket packet = new ClickSlotC2SPacket(SharedVariables.syncId, SharedVariables.revision, SharedVariables.slot, SharedVariables.button0, SharedVariables.action, ItemStack.EMPTY, new Int2ObjectArrayMap<>());
+                ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
             }
         });
 

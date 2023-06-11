@@ -4,11 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.main.Main;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
@@ -18,6 +22,8 @@ import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
+import org.apache.commons.io.FileUtils;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +35,9 @@ import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Mixin(HandledScreen.class)
@@ -97,9 +106,9 @@ public class HandledScreenMixin extends Screen {
                     for (Packet<?> packet : SharedVariables.delayedUIPackets) {
                         mc.getNetworkHandler().sendPacket(packet);
                     }
-                    mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
-                    SharedVariables.delayedUIPackets.clear();
                 }
+                mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
+                SharedVariables.delayedUIPackets.clear();
             }).width(160).position(5, 155).build());
 
             // register "fabricate packet" button in all HandledScreens
@@ -201,14 +210,14 @@ public class HandledScreenMixin extends Screen {
                                         MainClient.isInteger(slotField.getText()) &&
                                         MainClient.isInteger(buttonField.getText()) &&
                                         actionField.getSelectedItem() != null) {
-                            int syncId = Integer.parseInt(syncIdField.getText());
-                            int revision = Integer.parseInt(revisionField.getText());
-                            int slot = Integer.parseInt(slotField.getText());
-                            int button0 = Integer.parseInt(buttonField.getText());
-                            SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
+                            SharedVariables.syncId = Integer.parseInt(syncIdField.getText());
+                            SharedVariables.revision = Integer.parseInt(revisionField.getText());
+                            SharedVariables.slot = Integer.parseInt(slotField.getText());
+                            SharedVariables.button0 = Integer.parseInt(buttonField.getText());
+                            SharedVariables.action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
 
-                            if (action != null) {
-                                ClickSlotC2SPacket packet = new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>());
+                            if (SharedVariables.action != null) {
+                                ClickSlotC2SPacket packet = new ClickSlotC2SPacket(SharedVariables.syncId, SharedVariables.revision, SharedVariables.slot, SharedVariables.button0, SharedVariables.action, ItemStack.EMPTY, new Int2ObjectArrayMap<>());
                                 try {
                                     if (delayBox.isSelected()) {
                                         mc.getNetworkHandler().sendPacket(packet);
@@ -248,6 +257,17 @@ public class HandledScreenMixin extends Screen {
                         }
                     });
 
+                    JButton initializeButton = new JButton("Initialize");
+                    initializeButton.setFocusable(false);
+                    initializeButton.setBounds(225, 150, 75, 20);
+                    initializeButton.addActionListener((event0) -> {
+                        SharedVariables.syncId = Integer.parseInt(syncIdField.getText());
+                        SharedVariables.revision = Integer.parseInt(revisionField.getText());
+                        SharedVariables.slot = Integer.parseInt(slotField.getText());
+                        SharedVariables.button0 = Integer.parseInt(buttonField.getText());
+                        SharedVariables.action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
+                    });
+
                     clickSlotFrame.setBounds(0, 0, 450, 250);
                     clickSlotFrame.setLayout(null);
                     clickSlotFrame.setLocationRelativeTo(null);
@@ -262,6 +282,7 @@ public class HandledScreenMixin extends Screen {
                     clickSlotFrame.add(buttonField);
                     clickSlotFrame.add(actionField);
                     clickSlotFrame.add(sendButton);
+                    clickSlotFrame.add(initializeButton);
                     clickSlotFrame.add(statusLabel);
                     clickSlotFrame.add(delayBox);
                     clickSlotFrame.setVisible(true);
