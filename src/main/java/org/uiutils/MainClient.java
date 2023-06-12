@@ -128,7 +128,7 @@ public class MainClient implements ClientModInitializer {
         }).width(160).position(5, 155).build());
 
         // register "fabricate packet" button in all HandledScreens
-        screen.addDrawableChild(ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
+        ButtonWidget fabricatePacketButton = ButtonWidget.builder(Text.of("Fabricate packet"), (button) -> {
             // creates a gui allowing you to fabricate packets
 
             JFrame frame = new JFrame("Choose Packet");
@@ -390,7 +390,9 @@ public class MainClient implements ClientModInitializer {
             frame.add(clickSlotButton);
             frame.add(buttonClickButton);
             frame.setVisible(true);
-        }).width(115).position(5, 185).build());
+        }).width(115).position(5, 185).build();
+        fabricatePacketButton.active = !isMac;
+        screen.addDrawableChild(fabricatePacketButton);
 
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
             try {
