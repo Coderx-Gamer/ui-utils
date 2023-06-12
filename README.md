@@ -81,7 +81,7 @@ Dupe hunting mod. Incompatible with mac, needs fabric api
 
 - Enter the "Sync Id" field in the "Button Click Packet" gui as the "Sync Id" value you will see in the in-game gui.
 
-- Enter the "Button Id" field as what button you would like to click in a gui (starting from 0)
+- Enter the "Button Id" field as what button you would like to click in a gui (starting from 0.)
 
 - Example of this feature:
 ---
@@ -96,12 +96,17 @@ Dupe hunting mod. Incompatible with mac, needs fabric api
 
 # "Copy GUI Title JSON" button:
 ---
-- Copies the JSON format of your current GUI's title (e.g. if you have a GUI called "Server Shop" open, it will copy " {"text":"Server Shop"} " to your clipboard, or, if you have a normal chest open, it will copy " {"translate":"container.chest"} " to your clipboard).
+- Copies the JSON format of your current GUI's title (e.g. if you have a GUI called "Server Shop" open, it will copy " {"text":"Server Shop"} " to your clipboard, or, if you have a normal chest open, it will copy " {"translate":"container.chest"} " to your clipboard.)
 ---
 
 # "^toggleuiutils" command:
 ---
 - Enables/Disables UI-Utils in-game GUI rendering.
+---
+
+# Chat feature:
+---
+- You can send chat messages through inventory GUIs by typing your chat message / command in the bottom text field of your GUI and pressing enter (1.20+ only.)
 ---
 
 This mod concept is not an original idea, there are similar mods out there that have similar features, the goal of this mod is to be on the latest version and have some additional features.
