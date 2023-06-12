@@ -1,8 +1,8 @@
 package org.uiutils.mixin;
 
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.PacketCallbacks;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.UpdateSignC2SPacket;
@@ -18,7 +18,6 @@ public class ClientConnectionMixin {
     // called when sending any packet
     @Inject(at = @At("HEAD"), method = "sendImmediately", cancellable = true)
     public void sendImmediately(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
-
         // checks for if packets should be sent and if the packet is a gui related packet
         if (!SharedVariables.sendUIPackets && (packet instanceof ClickSlotC2SPacket || packet instanceof ButtonClickC2SPacket)) {
             ci.cancel();

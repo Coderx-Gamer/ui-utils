@@ -6,12 +6,12 @@
   "client": [
     "ClientConnectionMixin",
     "HandledScreenMixin",
-    "BookScreenMixin",
+    "ScreenMixin",
     "SignEditScreenMixin",
     "SleepingChatScreenMixin",
-    "ItemMixin",
     "ChatScreenMixin",
-    "accessor.ClientConnectionAccessor"
+    "accessor.ClientConnectionAccessor",
+    "accessor.ScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

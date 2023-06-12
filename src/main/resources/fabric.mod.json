@@ -27,12 +27,20 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.13",
+    "fabricloader": ">=0.14.21",
     "fabric": "*",
-    "minecraft": "~1.19",
+    "minecraft": "~1.20",
     "java": ">=17"
   },
+
+  "accessWidener": "uiutils.accesswidener",
+
   "suggests": {
     "another-mod": "*"
+  },
+
+  "custom": {
+    "modmenu:clientsideOnly": true,
+    "modmenu:api": false
   }
 }
