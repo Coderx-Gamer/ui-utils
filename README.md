@@ -1,5 +1,5 @@
 # UI-Utils
-Dupe hunting mod. Incompatible with mac, needs fabric api
+Dupe hunting mod. May be incompatible with mac, needs fabric api.
 ---
 
 # How to use:
@@ -112,5 +112,7 @@ Dupe hunting mod. Incompatible with mac, needs fabric api
 This mod concept is not an original idea, there are similar mods out there that have similar features, the goal of this mod is to be on the latest version and have some additional features.
 
 Some images here may be outdated.
+
+Note that mac may work with most of the mod but not the fabricate packet feature potentially.
 
 That's all the features for this mod currently, there may be more updates in the future but I cannot guarantee.
