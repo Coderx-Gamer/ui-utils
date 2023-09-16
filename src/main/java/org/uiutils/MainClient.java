@@ -25,11 +25,14 @@ import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class MainClient implements ClientModInitializer {
+    public static Font monospace;
+    public static Color dark_white;
+
     public static KeyBinding restoreScreenKey;
     public static boolean isMac = false;
 
@@ -56,13 +59,8 @@ public class MainClient implements ClientModInitializer {
         // set java.awt.headless to false if os is not mac (allows for jframe guis to be used)
         if (!isMac) {
             System.setProperty("java.awt.headless", "false");
-
-            // set uimanager to system look and feel
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
+            dark_white = new Color(220, 220, 220);
         }
     }
 
@@ -132,50 +130,74 @@ public class MainClient implements ClientModInitializer {
             // creates a gui allowing you to fabricate packets
 
             JFrame frame = new JFrame("Choose Packet");
+            frame.setBounds(0, 0, 450, 100);
+            frame.setResizable(false);
+            frame.setLocationRelativeTo(null);
+            frame.setLayout(null);
 
             JButton clickSlotButton = new JButton("Click Slot");
-            clickSlotButton.setBounds(100, 25, 110, 20);
             clickSlotButton.setFocusable(false);
+            clickSlotButton.setBounds(100, 25, 110, 20);
+            clickSlotButton.setBorder(BorderFactory.createEtchedBorder());
+            clickSlotButton.setBackground(dark_white);
+            clickSlotButton.setFont(monospace);
             clickSlotButton.addActionListener((event) -> {
                 // im too lazy to comment everything here just read the code yourself
                 frame.setVisible(false);
 
                 JFrame clickSlotFrame = new JFrame("Click Slot Packet");
+                clickSlotFrame.setBounds(0, 0, 450, 250);
+                clickSlotFrame.setResizable(false);
+                clickSlotFrame.setLocationRelativeTo(null);
+                clickSlotFrame.setLayout(null);
 
                 JLabel syncIdLabel = new JLabel("Sync Id:");
                 syncIdLabel.setFocusable(false);
+                syncIdLabel.setFont(monospace);
                 syncIdLabel.setBounds(25, 25, 100, 20);
 
                 JLabel revisionLabel = new JLabel("Revision:");
                 revisionLabel.setFocusable(false);
+                revisionLabel.setFont(monospace);
                 revisionLabel.setBounds(25, 50, 100, 20);
 
                 JLabel slotLabel = new JLabel("Slot:");
                 slotLabel.setFocusable(false);
+                slotLabel.setFont(monospace);
                 slotLabel.setBounds(25, 75, 100, 20);
 
                 JLabel buttonLabel = new JLabel("Button:");
                 buttonLabel.setFocusable(false);
+                buttonLabel.setFont(monospace);
                 buttonLabel.setBounds(25, 100, 100, 20);
 
                 JLabel actionLabel = new JLabel("Action:");
                 actionLabel.setFocusable(false);
+                actionLabel.setFont(monospace);
                 actionLabel.setBounds(25, 125, 100, 20);
 
+                JLabel timesToSendLabel = new JLabel("Times to send:");
+                timesToSendLabel.setFocusable(false);
+                timesToSendLabel.setFont(monospace);
+                timesToSendLabel.setBounds(25, 190, 100, 20);
+
                 JTextField syncIdField = new JTextField(1);
+                syncIdField.setFont(monospace);
                 syncIdField.setBounds(125, 25, 100, 20);
 
                 JTextField revisionField = new JTextField(1);
+                revisionField.setFont(monospace);
                 revisionField.setBounds(125, 50, 100, 20);
 
                 JTextField slotField = new JTextField(1);
+                slotField.setFont(monospace);
                 slotField.setBounds(125, 75, 100, 20);
 
                 JTextField buttonField = new JTextField(1);
+                buttonField.setFont(monospace);
                 buttonField.setBounds(125, 100, 100, 20);
 
-                JComboBox<String> actionField = new JComboBox<>();
-                List<String> actions = ImmutableList.of(
+                JComboBox<String> actionField = new JComboBox<>(new Vector<>(ImmutableList.of(
                         "PICKUP",
                         "QUICK_MOVE",
                         "SWAP",
@@ -183,102 +205,105 @@ public class MainClient implements ClientModInitializer {
                         "THROW",
                         "QUICK_CRAFT",
                         "PICKUP_ALL"
-                );
-                actionField.setEditable(false);
+                )));
                 actionField.setFocusable(false);
+                actionField.setEditable(false);
+                actionField.setBorder(BorderFactory.createEmptyBorder());
+                actionField.setBackground(dark_white);
+                actionField.setFont(monospace);
                 actionField.setBounds(125, 125, 100, 20);
-                for (String action : actions) {
-                    actionField.addItem(action);
-                }
 
                 JLabel statusLabel = new JLabel();
-                statusLabel.setForeground(Color.WHITE);
+                statusLabel.setVisible(false);
                 statusLabel.setFocusable(false);
-                statusLabel.setBounds(185, 150, 190, 20);
+                statusLabel.setFont(monospace);
+                statusLabel.setBounds(210, 150, 190, 20);
 
                 JCheckBox delayBox = new JCheckBox("Delay");
                 delayBox.setBounds(115, 150, 85, 20);
                 delayBox.setSelected(false);
+                delayBox.setFont(monospace);
                 delayBox.setFocusable(false);
+
+                JTextField timesToSendField = new JTextField("1");
+                timesToSendField.setFont(monospace);
+                timesToSendField.setBounds(125, 190, 100, 20);
 
                 JButton sendButton = new JButton("Send");
                 sendButton.setFocusable(false);
                 sendButton.setBounds(25, 150, 75, 20);
+                sendButton.setBorder(BorderFactory.createEtchedBorder());
+                sendButton.setBackground(dark_white);
+                sendButton.setFont(monospace);
                 sendButton.addActionListener((event0) -> {
-                    if (
-                            syncIdField.getText().isEmpty() ||
-                                    revisionField.getText().isEmpty() ||
-                                    slotField.getText().isEmpty() ||
-                                    buttonField.getText().isEmpty()) {
-                        statusLabel.setForeground(Color.RED.darker());
-                        statusLabel.setText("Invalid arguments!");
-                        MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
-                            statusLabel.setText("");
-                        }, 1500L);
-                        return;
-                    }
                     if (
                             MainClient.isInteger(syncIdField.getText()) &&
                                     MainClient.isInteger(revisionField.getText()) &&
                                     MainClient.isInteger(slotField.getText()) &&
                                     MainClient.isInteger(buttonField.getText()) &&
+                                    MainClient.isInteger(timesToSendField.getText()) &&
                                     actionField.getSelectedItem() != null) {
                         int syncId = Integer.parseInt(syncIdField.getText());
                         int revision = Integer.parseInt(revisionField.getText());
                         int slot = Integer.parseInt(slotField.getText());
                         int button0 = Integer.parseInt(buttonField.getText());
                         SlotActionType action = MainClient.stringToSlotActionType(actionField.getSelectedItem().toString());
+                        int timesToSend = Integer.parseInt(timesToSendField.getText());
 
                         if (action != null) {
                             ClickSlotC2SPacket packet = new ClickSlotC2SPacket(syncId, revision, slot, button0, action, ItemStack.EMPTY, new Int2ObjectArrayMap<>());
                             try {
+                                Runnable toRun;
                                 if (delayBox.isSelected()) {
-                                    mc.getNetworkHandler().sendPacket(packet);
+                                    toRun = () -> mc.getNetworkHandler().sendPacket(packet);
                                 } else {
-                                    ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                                    toRun = () -> ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                                }
+                                for (int i = 0; i < timesToSend; i++) {
+                                    toRun.run();
                                 }
                             } catch (Exception e) {
                                 statusLabel.setForeground(Color.RED.darker());
                                 statusLabel.setText("You must be connected to a server!");
                                 MainClient.queueTask(() -> {
-                                    statusLabel.setForeground(Color.WHITE);
+                                    statusLabel.setVisible(false);
                                     statusLabel.setText("");
                                 }, 1500L);
                                 return;
                             }
+                            statusLabel.setVisible(true);
                             statusLabel.setForeground(Color.GREEN.darker());
                             statusLabel.setText("Sent successfully!");
                             MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
+                                statusLabel.setVisible(false);
                                 statusLabel.setText("");
                             }, 1500L);
                         } else {
+                            statusLabel.setVisible(true);
                             statusLabel.setForeground(Color.RED.darker());
                             statusLabel.setText("Invalid arguments!");
                             MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
+                                statusLabel.setVisible(false);
                                 statusLabel.setText("");
                             }, 1500L);
                         }
                     } else {
+                        statusLabel.setVisible(true);
                         statusLabel.setForeground(Color.RED.darker());
                         statusLabel.setText("Invalid arguments!");
                         MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
+                            statusLabel.setVisible(false);
                             statusLabel.setText("");
                         }, 1500L);
                     }
                 });
 
-                clickSlotFrame.setBounds(0, 0, 450, 250);
-                clickSlotFrame.setLayout(null);
-                clickSlotFrame.setLocationRelativeTo(null);
                 clickSlotFrame.add(syncIdLabel);
                 clickSlotFrame.add(revisionLabel);
                 clickSlotFrame.add(slotLabel);
                 clickSlotFrame.add(buttonLabel);
                 clickSlotFrame.add(actionLabel);
+                clickSlotFrame.add(timesToSendLabel);
                 clickSlotFrame.add(syncIdField);
                 clickSlotFrame.add(revisionField);
                 clickSlotFrame.add(slotField);
@@ -287,106 +312,130 @@ public class MainClient implements ClientModInitializer {
                 clickSlotFrame.add(sendButton);
                 clickSlotFrame.add(statusLabel);
                 clickSlotFrame.add(delayBox);
+                clickSlotFrame.add(timesToSendField);
                 clickSlotFrame.setVisible(true);
             });
 
             JButton buttonClickButton = new JButton("Button Click");
-            buttonClickButton.setBounds(220, 25, 110, 20);
             buttonClickButton.setFocusable(false);
+            buttonClickButton.setBounds(220, 25, 110, 20);
+            buttonClickButton.setBorder(BorderFactory.createEtchedBorder());
+            buttonClickButton.setBackground(dark_white);
+            buttonClickButton.setFont(monospace);
             buttonClickButton.addActionListener((event) -> {
                 frame.setVisible(false);
 
                 JFrame buttonClickFrame = new JFrame("Button Click Packet");
+                buttonClickFrame.setBounds(0, 0, 450, 200);
+                buttonClickFrame.setResizable(false);
+                buttonClickFrame.setLocationRelativeTo(null);
+                buttonClickFrame.setLayout(null);
 
                 JLabel syncIdLabel = new JLabel("Sync Id:");
                 syncIdLabel.setFocusable(false);
+                syncIdLabel.setFont(monospace);
                 syncIdLabel.setBounds(25, 25, 100, 20);
 
                 JLabel buttonIdLabel = new JLabel("Button Id:");
                 buttonIdLabel.setFocusable(false);
+                buttonIdLabel.setFont(monospace);
                 buttonIdLabel.setBounds(25, 50, 100, 20);
 
                 JTextField syncIdField = new JTextField(1);
+                syncIdField.setFont(monospace);
                 syncIdField.setBounds(125, 25, 100, 20);
 
                 JTextField buttonIdField = new JTextField(1);
+                buttonIdField.setFont(monospace);
                 buttonIdField.setBounds(125, 50, 100, 20);
 
                 JLabel statusLabel = new JLabel();
-                statusLabel.setForeground(Color.WHITE);
+                statusLabel.setVisible(false);
                 statusLabel.setFocusable(false);
-                statusLabel.setBounds(185, 95, 190, 20);
+                statusLabel.setFont(monospace);
+                statusLabel.setBounds(210, 95, 190, 20);
 
                 JCheckBox delayBox = new JCheckBox("Delay");
                 delayBox.setBounds(115, 95, 85, 20);
                 delayBox.setSelected(false);
+                delayBox.setFont(monospace);
                 delayBox.setFocusable(false);
+
+                JLabel timesToSendLabel = new JLabel("Times to send:");
+                timesToSendLabel.setFocusable(false);
+                timesToSendLabel.setFont(monospace);
+                timesToSendLabel.setBounds(25, 130, 100, 20);
+
+                JTextField timesToSendField = new JTextField("1");
+                timesToSendField.setFont(monospace);
+                timesToSendField.setBounds(125, 130, 100, 20);
 
                 JButton sendButton = new JButton("Send");
                 sendButton.setFocusable(false);
                 sendButton.setBounds(25, 95, 75, 20);
+                sendButton.setBorder(BorderFactory.createEtchedBorder());
+                sendButton.setBackground(dark_white);
+                sendButton.setFont(monospace);
                 sendButton.addActionListener((event0) -> {
-                    if (syncIdField.getText().isEmpty() || buttonIdField.getText().isEmpty()) {
-                        statusLabel.setForeground(Color.RED.darker());
-                        statusLabel.setText("Invalid arguments!");
-                        MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
-                            statusLabel.setText("");
-                        }, 1500L);
-                        return;
-                    }
-                    if (MainClient.isInteger(syncIdField.getText()) && MainClient.isInteger(buttonIdField.getText())) {
+                    if (
+                            MainClient.isInteger(syncIdField.getText()) &&
+                            MainClient.isInteger(buttonIdField.getText()) &&
+                            MainClient.isInteger(timesToSendField.getText())) {
                         int syncId = Integer.parseInt(syncIdField.getText());
                         int buttonId = Integer.parseInt(buttonIdField.getText());
+                        int timesToSend = Integer.parseInt(timesToSendField.getText());
 
                         ButtonClickC2SPacket packet = new ButtonClickC2SPacket(syncId, buttonId);
                         try {
+                            Runnable toRun;
                             if (delayBox.isSelected()) {
-                                mc.getNetworkHandler().sendPacket(packet);
+                                toRun = () -> mc.getNetworkHandler().sendPacket(packet);
                             } else {
-                                ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                                toRun = () -> ((ClientConnectionAccessor) mc.getNetworkHandler().getConnection()).getChannel().writeAndFlush(packet);
+                            }
+                            for (int i = 0; i < timesToSend; i++) {
+                                toRun.run();
                             }
                         } catch (Exception e) {
+                            statusLabel.setVisible(true);
                             statusLabel.setForeground(Color.RED.darker());
                             statusLabel.setText("You must be connected to a server!");
                             MainClient.queueTask(() -> {
-                                statusLabel.setForeground(Color.WHITE);
+                                statusLabel.setVisible(false);
                                 statusLabel.setText("");
                             }, 1500L);
                             return;
                         }
+                        statusLabel.setVisible(true);
                         statusLabel.setForeground(Color.GREEN.darker());
                         statusLabel.setText("Sent successfully!");
                         MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
+                            statusLabel.setVisible(false);
                             statusLabel.setText("");
                         }, 1500L);
                     } else {
+                        statusLabel.setVisible(true);
                         statusLabel.setForeground(Color.RED.darker());
                         statusLabel.setText("Invalid arguments!");
                         MainClient.queueTask(() -> {
-                            statusLabel.setForeground(Color.WHITE);
+                            statusLabel.setVisible(false);
                             statusLabel.setText("");
                         }, 1500L);
                     }
                 });
 
-                buttonClickFrame.setBounds(0, 0, 450, 180);
-                buttonClickFrame.setLayout(null);
-                buttonClickFrame.setLocationRelativeTo(null);
                 buttonClickFrame.add(syncIdLabel);
                 buttonClickFrame.add(buttonIdLabel);
                 buttonClickFrame.add(syncIdField);
+                buttonClickFrame.add(timesToSendLabel);
                 buttonClickFrame.add(buttonIdField);
                 buttonClickFrame.add(sendButton);
                 buttonClickFrame.add(statusLabel);
                 buttonClickFrame.add(delayBox);
+                buttonClickFrame.add(timesToSendField);
                 buttonClickFrame.setVisible(true);
             });
 
-            frame.setBounds(0, 0, 450, 100);
-            frame.setLayout(null);
-            frame.setLocationRelativeTo(null);
             frame.add(clickSlotButton);
             frame.add(buttonClickButton);
             frame.setVisible(true);
