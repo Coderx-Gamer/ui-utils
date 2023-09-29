@@ -17,7 +17,7 @@ public class ClientConnectionMixin {
 
     // called when sending any packet
     @Inject(at = @At("HEAD"), method = "sendImmediately", cancellable = true)
-    public void sendImmediately(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
+    public void sendImmediately(Packet<?> packet, PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
         // checks for if packets should be sent and if the packet is a gui related packet
         if (!SharedVariables.sendUIPackets && (packet instanceof ClickSlotC2SPacket || packet instanceof ButtonClickC2SPacket)) {
             ci.cancel();

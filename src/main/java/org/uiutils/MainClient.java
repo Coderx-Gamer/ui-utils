@@ -31,14 +31,15 @@ import java.util.Vector;
 
 public class MainClient implements ClientModInitializer {
     public static Font monospace;
-    public static Color dark_white;
+    public static Color darkWhite;
 
     public static KeyBinding restoreScreenKey;
     public static boolean isMac = false;
 
     @Override
     public void onInitializeClient() {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("mac") || os.contains("darwin") || os.contains("osx")) {
             isMac = true;
         }
 
@@ -60,7 +61,7 @@ public class MainClient implements ClientModInitializer {
         if (!isMac) {
             System.setProperty("java.awt.headless", "false");
             monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
-            dark_white = new Color(220, 220, 220);
+            darkWhite = new Color(220, 220, 220);
         }
     }
 
@@ -101,6 +102,9 @@ public class MainClient implements ClientModInitializer {
                 for (Packet<?> packet : SharedVariables.delayedUIPackets) {
                     mc.getNetworkHandler().sendPacket(packet);
                 }
+                if (mc.player != null) {
+                    mc.player.sendMessage(Text.of("Sent " + SharedVariables.delayedUIPackets.size() + " packets."));
+                }
                 SharedVariables.delayedUIPackets.clear();
             }
         }).width(115).position(5, 95).build());
@@ -139,14 +143,14 @@ public class MainClient implements ClientModInitializer {
             clickSlotButton.setFocusable(false);
             clickSlotButton.setBounds(100, 25, 110, 20);
             clickSlotButton.setBorder(BorderFactory.createEtchedBorder());
-            clickSlotButton.setBackground(dark_white);
+            clickSlotButton.setBackground(darkWhite);
             clickSlotButton.setFont(monospace);
             clickSlotButton.addActionListener((event) -> {
                 // im too lazy to comment everything here just read the code yourself
                 frame.setVisible(false);
 
                 JFrame clickSlotFrame = new JFrame("Click Slot Packet");
-                clickSlotFrame.setBounds(0, 0, 450, 250);
+                clickSlotFrame.setBounds(0, 0, 450, 300);
                 clickSlotFrame.setResizable(false);
                 clickSlotFrame.setLocationRelativeTo(null);
                 clickSlotFrame.setLayout(null);
@@ -209,7 +213,7 @@ public class MainClient implements ClientModInitializer {
                 actionField.setFocusable(false);
                 actionField.setEditable(false);
                 actionField.setBorder(BorderFactory.createEmptyBorder());
-                actionField.setBackground(dark_white);
+                actionField.setBackground(darkWhite);
                 actionField.setFont(monospace);
                 actionField.setBounds(125, 125, 100, 20);
 
@@ -233,7 +237,7 @@ public class MainClient implements ClientModInitializer {
                 sendButton.setFocusable(false);
                 sendButton.setBounds(25, 150, 75, 20);
                 sendButton.setBorder(BorderFactory.createEtchedBorder());
-                sendButton.setBackground(dark_white);
+                sendButton.setBackground(darkWhite);
                 sendButton.setFont(monospace);
                 sendButton.addActionListener((event0) -> {
                     if (
@@ -320,13 +324,13 @@ public class MainClient implements ClientModInitializer {
             buttonClickButton.setFocusable(false);
             buttonClickButton.setBounds(220, 25, 110, 20);
             buttonClickButton.setBorder(BorderFactory.createEtchedBorder());
-            buttonClickButton.setBackground(dark_white);
+            buttonClickButton.setBackground(darkWhite);
             buttonClickButton.setFont(monospace);
             buttonClickButton.addActionListener((event) -> {
                 frame.setVisible(false);
 
                 JFrame buttonClickFrame = new JFrame("Button Click Packet");
-                buttonClickFrame.setBounds(0, 0, 450, 200);
+                buttonClickFrame.setBounds(0, 0, 450, 250);
                 buttonClickFrame.setResizable(false);
                 buttonClickFrame.setLocationRelativeTo(null);
                 buttonClickFrame.setLayout(null);
@@ -374,7 +378,7 @@ public class MainClient implements ClientModInitializer {
                 sendButton.setFocusable(false);
                 sendButton.setBounds(25, 95, 75, 20);
                 sendButton.setBorder(BorderFactory.createEtchedBorder());
-                sendButton.setBackground(dark_white);
+                sendButton.setBackground(darkWhite);
                 sendButton.setFont(monospace);
                 sendButton.addActionListener((event0) -> {
                     if (

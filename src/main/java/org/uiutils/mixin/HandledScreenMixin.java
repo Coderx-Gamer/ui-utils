@@ -46,6 +46,14 @@ public abstract class HandledScreenMixin extends Screen {
                 @Override
                 public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                     if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                        if (this.getText().equals("^toggleuiutils")) {
+                            SharedVariables.enabled = !SharedVariables.enabled;
+                            if (mc.player != null) {
+                                mc.player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."));
+                            }
+                            return false;
+                        }
+
                         if (this.getText().startsWith("/")) {
                             mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
                         } else {
@@ -61,13 +69,6 @@ public abstract class HandledScreenMixin extends Screen {
             this.addressField.setMaxLength(256);
 
             this.addDrawableChild(this.addressField);
-        }
-    }
-
-    @Inject(at = @At("TAIL"), method = "tick")
-    public void tick(CallbackInfo ci) {
-        if (SharedVariables.enabled && this.addressField != null) {
-            this.addressField.tick();
         }
     }
 

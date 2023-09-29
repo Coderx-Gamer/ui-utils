@@ -32,14 +32,6 @@ public abstract class ScreenMixin {
     private TextFieldWidget addressField;
     private boolean initialized = false;
 
-    @Inject(at = @At("TAIL"), method = "tick")
-    public void tick(CallbackInfo ci) {
-        // check if the current gui is a lectern gui, ui-utils is enabled, and addressField is not null
-        if ((Object) this instanceof LecternScreen && SharedVariables.enabled && this.addressField != null) {
-            this.addressField.tick();
-        }
-    }
-
     // inject at the end of the render method (if instanceof LecternScreen)
     @Inject(at = @At("TAIL"), method = "render")
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
@@ -56,6 +48,14 @@ public abstract class ScreenMixin {
                     @Override
                     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                         if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                            if (this.getText().equals("^toggleuiutils")) {
+                                SharedVariables.enabled = !SharedVariables.enabled;
+                                if (mc.player != null) {
+                                    mc.player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."));
+                                }
+                                return false;
+                            }
+
                             if (this.getText().startsWith("/")) {
                                 mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
                             } else {
