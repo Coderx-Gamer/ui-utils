@@ -16,6 +16,7 @@ public class SleepingChatScreenMixin extends Screen {
     }
 
     // called when SleepingChatScreen is created
+    // FIXME: check if ui utils is enabled before rendering
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
         // register "client wake up" button for SleepingChatScreen
