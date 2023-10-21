@@ -120,7 +120,9 @@ Dupe hunting mod. May be incompatible with mac, needs Fabric API.
 ## Building:
 
 ---
+
 You can find building instructions on the UI-Utils website (ui-utils.com).
+
 ---
 
 This mod concept is not an original idea, there are similar mods out there that have similar features, the goal of this mod is to be on the latest version and have some additional features.
