@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.uiutils.SharedVariables;
 
 @Mixin(SleepingChatScreen.class)
 public class SleepingChatScreenMixin extends Screen {
@@ -16,14 +17,17 @@ public class SleepingChatScreenMixin extends Screen {
     }
 
     // called when SleepingChatScreen is created
-    // FIXME: check if ui utils is enabled before rendering
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
-        // register "client wake up" button for SleepingChatScreen
-        addDrawableChild(ButtonWidget.builder(Text.of("Client wake up"), (button) -> {
-            // wakes the player up client-side
-            client.player.wakeUp();
-            client.setScreen(null);
-        }).width(160).position(5, 5).build());
+        // register "client wake up" button for SleepingChatScreen if ui utils is enabled
+        if (SharedVariables.enabled) {
+            addDrawableChild(ButtonWidget.builder(Text.of("Client wake up"), (button) -> {
+                // wakes the player up client-side
+                if (this.client != null && this.client.player != null) {
+                    this.client.player.wakeUp();
+                    this.client.setScreen(null);
+                }
+            }).width(115).position(5, 5).build());
+        }
     }
 }

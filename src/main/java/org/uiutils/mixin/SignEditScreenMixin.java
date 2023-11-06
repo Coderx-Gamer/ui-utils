@@ -23,11 +23,18 @@ public class SignEditScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
 
-        // register "close without packet" button for SignEditScreen
-        addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
-            // disables sign editing and closes the current gui without sending a packet
-            SharedVariables.shouldEditSign = false;
-            mc.setScreen(null);
-        }).width(160).position(5, 5).build());
+        // register "close without packet" button for SignEditScreen if ui utils is enabled
+        if (SharedVariables.enabled) {
+            addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
+                // disables sign editing and closes the current gui without sending a packet
+                SharedVariables.shouldEditSign = false;
+                mc.setScreen(null);
+            }).width(115).position(5, 5).build());
+            addDrawableChild(ButtonWidget.builder(Text.of("Disconnect"), (button) -> {
+                if (mc.getNetworkHandler() != null) {
+                    mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI-UTILS)"));
+                }
+            }).width(115).position(5, 35).build());
+        }
     }
 }

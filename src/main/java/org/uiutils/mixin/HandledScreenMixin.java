@@ -39,10 +39,10 @@ public abstract class HandledScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
         if (SharedVariables.enabled) {
-            MainClient.createWidgets(mc, this, this.textRenderer);
+            MainClient.createWidgets(mc, this);
 
             // create chat box
-            this.addressField = new TextFieldWidget(textRenderer, 5, 245, 200, 20, Text.of("Chat ...")) {
+            this.addressField = new TextFieldWidget(this.textRenderer, 5, 245, 200, 20, Text.of("Chat ...")) {
                 @Override
                 public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                     if (keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -95,12 +95,10 @@ public abstract class HandledScreenMixin extends Screen {
     }
 
     // inject at the end of the render method
-    @Inject(at = @At("HEAD"), method = "render")
+    @Inject(at = @At("TAIL"), method = "render")
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        super.render(context, mouseX, mouseY, delta);
-
+        // display sync id, revision, and credit if ui utils is enabled
         if (SharedVariables.enabled) {
-            // display sync id and revision
             MainClient.createText(mc, context, this.textRenderer);
         }
     }

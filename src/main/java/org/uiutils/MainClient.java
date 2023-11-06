@@ -34,13 +34,12 @@ public class MainClient implements ClientModInitializer {
     public static Color darkWhite;
 
     public static KeyBinding restoreScreenKey;
-    public static boolean isMac = false;
 
     @Override
     public void onInitializeClient() {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("mac") || os.contains("darwin") || os.contains("osx")) {
-            isMac = true;
+            SharedVariables.isMac = true;
         }
 
         // register "restore screen" key
@@ -58,7 +57,7 @@ public class MainClient implements ClientModInitializer {
         });
 
         // set java.awt.headless to false if os is not mac (allows for jframe guis to be used)
-        if (!isMac) {
+        if (!SharedVariables.isMac) {
             System.setProperty("java.awt.headless", "false");
             monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
             darkWhite = new Color(220, 220, 220);
@@ -73,7 +72,7 @@ public class MainClient implements ClientModInitializer {
         context.drawText(textRenderer, "UI-Utils made by Coderx Gamer.", 10, mc.currentScreen.height - 20, Color.WHITE.getRGB(), false);
     }
 
-    public static void createWidgets(MinecraftClient mc, Screen screen, TextRenderer textRenderer) {
+    public static void createWidgets(MinecraftClient mc, Screen screen) {
         // register "close without packet" button in all HandledScreens
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
             // closes the current gui without sending a packet to the current server
@@ -119,14 +118,12 @@ public class MainClient implements ClientModInitializer {
         // register "disconnect and send packets" button in all HandledScreens
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Disconnect and send packets"), (button) -> {
             // sends all "delayed" gui related packets before disconnecting, use: potential race conditions on non-vanilla servers
-            if (!SharedVariables.delayedUIPackets.isEmpty()) {
-                SharedVariables.delayUIPackets = false;
-                for (Packet<?> packet : SharedVariables.delayedUIPackets) {
-                    mc.getNetworkHandler().sendPacket(packet);
-                }
-                mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI UTILS)"));
-                SharedVariables.delayedUIPackets.clear();
+            SharedVariables.delayUIPackets = false;
+            for (Packet<?> packet : SharedVariables.delayedUIPackets) {
+                mc.getNetworkHandler().sendPacket(packet);
             }
+            mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI-UTILS)"));
+            SharedVariables.delayedUIPackets.clear();
         }).width(160).position(5, 155).build());
 
         // register "fabricate packet" button in all HandledScreens
@@ -444,7 +441,7 @@ public class MainClient implements ClientModInitializer {
             frame.add(buttonClickButton);
             frame.setVisible(true);
         }).width(115).position(5, 185).build();
-        fabricatePacketButton.active = !isMac;
+        fabricatePacketButton.active = !SharedVariables.isMac;
         screen.addDrawableChild(fabricatePacketButton);
 
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {

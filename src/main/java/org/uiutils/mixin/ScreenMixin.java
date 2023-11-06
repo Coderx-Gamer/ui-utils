@@ -33,15 +33,15 @@ public abstract class ScreenMixin {
     private boolean initialized = false;
 
     // inject at the end of the render method (if instanceof LecternScreen)
-    @Inject(at = @At("TAIL"), method = "render")
-    public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
+    public void init(MinecraftClient client, int width, int height, CallbackInfo ci) {
         // check if the current gui is a lectern gui and if ui-utils is enabled
-        if ((Object) this instanceof LecternScreen screen && SharedVariables.enabled) {
+        if (mc.currentScreen instanceof LecternScreen screen && SharedVariables.enabled) {
             // setup widgets
-            if (!this.initialized) {
+            if (/*!this.initialized*/ true) {
                 // check if the current gui is a lectern gui and ui-utils is enabled
                 TextRenderer textRenderer = ((ScreenAccessor) this).getTextRenderer();
-                MainClient.createWidgets(mc, screen, textRenderer);
+                MainClient.createWidgets(mc, screen);
 
                 // create chat box
                 this.addressField = new TextFieldWidget(textRenderer, 5, 245, 200, 20, Text.of("Chat ...")) {
@@ -73,8 +73,13 @@ public abstract class ScreenMixin {
                 this.addDrawableChild(this.addressField);
                 this.initialized = true;
             }
+        }
+    }
 
-            // display sync id, revision, and credit
+    @Inject(at = @At("TAIL"), method = "render")
+    public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        // display sync id, revision, and credit if ui utils is enabled
+        if (SharedVariables.enabled && mc.player != null && mc.currentScreen instanceof LecternScreen) {
             MainClient.createText(mc, context, ((ScreenAccessor) this).getTextRenderer());
         }
     }
