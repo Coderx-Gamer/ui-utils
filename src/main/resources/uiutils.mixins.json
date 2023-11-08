@@ -4,12 +4,14 @@
   "package": "org.uiutils.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ChatScreenMixin",
     "ClientConnectionMixin",
+    "ClientCommonNetworkHandlerMixin",
     "HandledScreenMixin",
+    "MultiplayerScreenMixin",
     "ScreenMixin",
     "SignEditScreenMixin",
     "SleepingChatScreenMixin",
-    "ChatScreenMixin",
     "accessor.ClientConnectionAccessor",
     "accessor.ScreenAccessor"
   ],

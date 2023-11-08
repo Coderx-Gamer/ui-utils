@@ -25,7 +25,8 @@ import java.util.regex.Pattern;
 @SuppressWarnings("all")
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
-    @Shadow public abstract <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement);
+    @Shadow
+    public abstract <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement);
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
@@ -44,7 +45,7 @@ public abstract class ScreenMixin {
                 MainClient.createWidgets(mc, screen);
 
                 // create chat box
-                this.addressField = new TextFieldWidget(textRenderer, 5, 245, 200, 20, Text.of("Chat ...")) {
+                this.addressField = new TextFieldWidget(textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                     @Override
                     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                         if (keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -56,10 +57,14 @@ public abstract class ScreenMixin {
                                 return false;
                             }
 
-                            if (this.getText().startsWith("/")) {
-                                mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
+                            if (mc.getNetworkHandler() != null) {
+                                if (this.getText().startsWith("/")) {
+                                    mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
+                                } else {
+                                    mc.getNetworkHandler().sendChatMessage(this.getText());
+                                }
                             } else {
-                                mc.getNetworkHandler().sendChatMessage(this.getText());
+                                MainClient.LOGGER.warn("Minecraft network handler (mc.getNetworkHandler()) was null while trying to send chat message from UI Utils.");
                             }
 
                             this.setText("");
@@ -68,7 +73,7 @@ public abstract class ScreenMixin {
                     }
                 };
                 this.addressField.setText("");
-                this.addressField.setMaxLength(256);
+                this.addressField.setMaxLength(255);
 
                 this.addDrawableChild(this.addressField);
                 this.initialized = true;

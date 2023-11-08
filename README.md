@@ -117,6 +117,14 @@ Dupe hunting mod. May be incompatible with mac, needs Fabric API.
 - Enables/Disables UI-Utils in-game GUI rendering.
 ---
 
+## Resource Pack Bypassing
+
+---
+
+You can bypass a required resource pack on a server by turning on "Bypass Resource Pack" in the multiplayer screen, if you still get kicked, enable "Force Deny", which will block all resource packs.
+
+---
+
 ## Building:
 
 ---

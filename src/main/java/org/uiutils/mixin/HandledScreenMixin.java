@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,16 +24,22 @@ import java.util.regex.Pattern;
 
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin extends Screen {
-    @Shadow protected abstract boolean handleHotbarKeyPressed(int keyCode, int scanCode);
-    @Shadow protected abstract void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType);
-    @Shadow @Nullable protected Slot focusedSlot;
-
-    protected HandledScreenMixin(Text title) {
-        super(title);
+    private HandledScreenMixin() {
+        super(null);
     }
 
+    @Shadow
+    protected abstract boolean handleHotbarKeyPressed(int keyCode, int scanCode);
+    @Shadow
+    protected abstract void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType);
+    @Shadow
+    @Nullable
+    protected Slot focusedSlot;
+
+    @Unique
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
+    @Unique
     private TextFieldWidget addressField;
 
     // called when creating a HandledScreen
@@ -42,7 +49,7 @@ public abstract class HandledScreenMixin extends Screen {
             MainClient.createWidgets(mc, this);
 
             // create chat box
-            this.addressField = new TextFieldWidget(this.textRenderer, 5, 245, 200, 20, Text.of("Chat ...")) {
+            this.addressField = new TextFieldWidget(this.textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                 @Override
                 public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                     if (keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -54,10 +61,14 @@ public abstract class HandledScreenMixin extends Screen {
                             return false;
                         }
 
-                        if (this.getText().startsWith("/")) {
-                            mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
+                        if (mc.getNetworkHandler() != null) {
+                            if (this.getText().startsWith("/")) {
+                                mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
+                            } else {
+                                mc.getNetworkHandler().sendChatMessage(this.getText());
+                            }
                         } else {
-                            mc.getNetworkHandler().sendChatMessage(this.getText());
+                            MainClient.LOGGER.warn("Minecraft network handler (mc.getNetworkHandler()) was null while trying to send chat message from UI Utils.");
                         }
 
                         this.setText("");
