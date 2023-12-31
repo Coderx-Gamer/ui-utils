@@ -18,16 +18,18 @@ public class MultiplayerScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
-        // Create "Bypass Resource Pack" option
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Bypass Resource Pack: " + (SharedVariables.bypassResourcePack ? "ON" : "OFF")), (button) -> {
-            SharedVariables.bypassResourcePack = !SharedVariables.bypassResourcePack;
-            button.setMessage(Text.of("Bypass Resource Pack: " + (SharedVariables.bypassResourcePack ? "ON" : "OFF")));
-        }).width(160).position(this.width - 170, this.height - 50).build());
+        if (SharedVariables.enabled) {
+            // Create "Bypass Resource Pack" option
+            this.addDrawableChild(ButtonWidget.builder(Text.of("Bypass Resource Pack: " + (SharedVariables.bypassResourcePack ? "ON" : "OFF")), (button) -> {
+                SharedVariables.bypassResourcePack = !SharedVariables.bypassResourcePack;
+                button.setMessage(Text.of("Bypass Resource Pack: " + (SharedVariables.bypassResourcePack ? "ON" : "OFF")));
+            }).width(160).position(this.width - 170, this.height - 50).build());
 
-        // Create "Force Deny" option
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Force Deny: " + (SharedVariables.resourcePackForceDeny ? "ON" : "OFF")), (button) -> {
-            SharedVariables.resourcePackForceDeny = !SharedVariables.resourcePackForceDeny;
-            button.setMessage(Text.of("Force Deny: " + (SharedVariables.resourcePackForceDeny ? "ON" : "OFF")));
-        }).width(160).position(this.width - 170, this.height - 25).build());
+            // Create "Force Deny" option
+            this.addDrawableChild(ButtonWidget.builder(Text.of("Force Deny: " + (SharedVariables.resourcePackForceDeny ? "ON" : "OFF")), (button) -> {
+                SharedVariables.resourcePackForceDeny = !SharedVariables.resourcePackForceDeny;
+                button.setMessage(Text.of("Force Deny: " + (SharedVariables.resourcePackForceDeny ? "ON" : "OFF")));
+            }).width(160).position(this.width - 170, this.height - 25).build());
+        }
     }
 }

@@ -445,7 +445,7 @@ public class MainClient implements ClientModInitializer {
                 if (mc.currentScreen == null) {
                     throw new IllegalStateException("The current minecraft screen (mc.currentScreen) is null");
                 }
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serializer.toJson(mc.currentScreen.getTitle())), null);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serialization.toJsonString(mc.currentScreen.getTitle())), null);
             } catch (IllegalStateException e) {
                 LOGGER.error("Error while copying title JSON to clipboard", e);
             }

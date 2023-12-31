@@ -25,13 +25,13 @@ public abstract class ClientCommonNetworkHandlerMixin {
 
     @Inject(at = @At("HEAD"), method = "onResourcePackSend", cancellable = true)
     public void onResourcePackSend(ResourcePackSendS2CPacket packet, CallbackInfo ci) {
-        if (SharedVariables.bypassResourcePack && (packet.isRequired() || SharedVariables.resourcePackForceDeny)) {
-            this.sendPacket(new ResourcePackStatusC2SPacket(ResourcePackStatusC2SPacket.Status.ACCEPTED));
-            this.sendPacket(new ResourcePackStatusC2SPacket(ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
+        if (SharedVariables.bypassResourcePack && (packet.required() || SharedVariables.resourcePackForceDeny)) {
+            this.sendPacket(new ResourcePackStatusC2SPacket(MinecraftClient.getInstance().getSession().getUuidOrNull(), ResourcePackStatusC2SPacket.Status.ACCEPTED));
+            this.sendPacket(new ResourcePackStatusC2SPacket(MinecraftClient.getInstance().getSession().getUuidOrNull(), ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
             MainClient.LOGGER.info(
                     "[UI Utils]: Required Resource Pack Bypassed, Message: " +
-                            (packet.getPrompt() == null ? "<no message>" : packet.getPrompt().getString()) +
-                            ", URL: " + (packet.getUrl() == null ? "<no url>" : packet.getUrl())
+                            (packet.prompt() == null ? "<no message>" : packet.prompt().getString()) +
+                            ", URL: " + (packet.url() == null ? "<no url>" : packet.url())
             );
             ci.cancel();
         }
