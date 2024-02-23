@@ -39,6 +39,7 @@ public class MainClient implements ClientModInitializer {
     public static KeyBinding restoreScreenKey;
 
     public static Logger LOGGER = LoggerFactory.getLogger("ui-utils");
+    public static MinecraftClient mc = MinecraftClient.getInstance();
 
     @Override
     public void onInitializeClient() {
