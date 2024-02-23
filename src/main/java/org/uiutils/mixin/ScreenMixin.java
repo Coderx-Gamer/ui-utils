@@ -39,7 +39,7 @@ public abstract class ScreenMixin {
         // check if the current gui is a lectern gui and if ui-utils is enabled
         if (mc.currentScreen instanceof LecternScreen screen && SharedVariables.enabled) {
             // setup widgets
-            if (/*!this.initialized*/ true) {
+            if (/*!this.initialized*/ true) { // bro why did you do this cxg :skull:
                 // check if the current gui is a lectern gui and ui-utils is enabled
                 TextRenderer textRenderer = ((ScreenAccessor) this).getTextRenderer();
                 MainClient.createWidgets(mc, screen);

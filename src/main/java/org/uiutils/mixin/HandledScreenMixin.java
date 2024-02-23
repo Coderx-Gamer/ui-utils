@@ -88,7 +88,12 @@ public abstract class HandledScreenMixin extends Screen {
         cir.cancel();
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             cir.setReturnValue(true);
+<<<<<<< Updated upstream
         } else if (mc.options.inventoryKey.matchesKey(keyCode, scanCode) && !this.addressField.isSelected()) {
+=======
+        } else if (MainClient.mc.options.inventoryKey.matchesKey(keyCode, scanCode) && (this.addressField == null || !this.addressField.isSelected())) {
+            // Crashes if address field does not exist (because of ui utils disabled, this is a temporary fix.)
+>>>>>>> Stashed changes
             this.close();
             cir.setReturnValue(true);
         } else {
