@@ -129,7 +129,7 @@ You can bypass a required resource pack on a server by turning on "Bypass Resour
 
 ---
 
-You can find building instructions on the UI-Utils website (ui-utils.com).
+You can find building instructions on the UI-Utils website (https://ui-utils.com).
 
 ---
 
