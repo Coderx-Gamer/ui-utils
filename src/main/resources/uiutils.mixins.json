@@ -4,14 +4,17 @@
   "package": "org.uiutils.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "BookEditScreenMixin",
+    "BookScreenMixin",
     "ChatScreenMixin",
-    "ClientConnectionMixin",
     "ClientCommonNetworkHandlerMixin",
+    "ClientConnectionMixin",
     "HandledScreenMixin",
     "MultiplayerScreenMixin",
     "ScreenMixin",
     "SignEditScreenMixin",
     "SleepingChatScreenMixin",
+    "TitleScreenMixin",
     "accessor.ClientConnectionAccessor",
     "accessor.ScreenAccessor"
   ],

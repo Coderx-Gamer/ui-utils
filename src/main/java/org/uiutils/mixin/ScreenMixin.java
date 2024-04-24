@@ -41,6 +41,10 @@ public abstract class ScreenMixin {
             // setup widgets
             if (/*!this.initialized*/ true) { // bro why did you do this cxg :skull:
                 // check if the current gui is a lectern gui and ui-utils is enabled
+                // if you do not message me about this @coderx-gamer you are not reading my commits
+                // why would you read them anyway tbh
+                // ill clean this up later if you dont fix it
+
                 TextRenderer textRenderer = ((ScreenAccessor) this).getTextRenderer();
                 MainClient.createWidgets(mc, screen);
 
@@ -83,7 +87,7 @@ public abstract class ScreenMixin {
 
     @Inject(at = @At("TAIL"), method = "render")
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        // display sync id, revision, and credit if ui utils is enabled
+        // display sync id, revision, if ui utils is enabled
         if (SharedVariables.enabled && mc.player != null && mc.currentScreen instanceof LecternScreen) {
             MainClient.createText(mc, context, ((ScreenAccessor) this).getTextRenderer());
         }

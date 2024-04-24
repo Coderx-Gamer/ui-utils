@@ -67,7 +67,7 @@ public abstract class HandledScreenMixin extends Screen {
                             } else {
                                 mc.getNetworkHandler().sendChatMessage(this.getText());
                             }
-                        } else {
+                    } else {
                             MainClient.LOGGER.warn("Minecraft network handler (mc.getNetworkHandler()) was null while trying to send chat message from UI Utils.");
                         }
 
@@ -109,7 +109,9 @@ public abstract class HandledScreenMixin extends Screen {
     // inject at the end of the render method
     @Inject(at = @At("TAIL"), method = "render")
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        // display sync id, revision, and credit if ui utils is enabled
+        // display sync id, revision, if ui utils is enabled
+        // this hurts me physically to look at this in a render method :(
+        // im too lazy to fix it tho :D
         if (SharedVariables.enabled) {
             MainClient.createText(mc, context, this.textRenderer);
         }

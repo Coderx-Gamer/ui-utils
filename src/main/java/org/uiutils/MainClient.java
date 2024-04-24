@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -28,6 +30,7 @@ import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -40,9 +43,10 @@ public class MainClient implements ClientModInitializer {
 
     public static Logger LOGGER = LoggerFactory.getLogger("ui-utils");
     public static MinecraftClient mc = MinecraftClient.getInstance();
-
     @Override
     public void onInitializeClient() {
+        UpdateUtils.checkForUpdates();
+
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("mac") || os.contains("darwin") || os.contains("osx")) {
             SharedVariables.isMac = true;
@@ -72,11 +76,14 @@ public class MainClient implements ClientModInitializer {
 
     @SuppressWarnings("all")
     public static void createText(MinecraftClient mc, DrawContext context, TextRenderer textRenderer) {
-        // display the current gui's sync id, revision, and credit
+        // display the current gui's sync id, revision
         context.drawText(textRenderer, "Sync Id: " + mc.player.currentScreenHandler.syncId, 200, 5, Color.WHITE.getRGB(), false);
         context.drawText(textRenderer, "Revision: " + mc.player.currentScreenHandler.getRevision(), 200, 35, Color.WHITE.getRGB(), false);
     }
 
+    // bro are you ever going to clean this up?
+    // this code is very messy, ill clean it up if you dont
+    // -- MrBreakNFix
     public static void createWidgets(MinecraftClient mc, Screen screen) {
         // register "close without packet" button in all HandledScreens
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
@@ -446,7 +453,7 @@ public class MainClient implements ClientModInitializer {
                 if (mc.currentScreen == null) {
                     throw new IllegalStateException("The current minecraft screen (mc.currentScreen) is null");
                 }
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serialization.toJsonString(mc.currentScreen.getTitle())), null);
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(Text.Serialization.toJsonString(mc.currentScreen.getTitle(), Objects.requireNonNull(MinecraftClient.getInstance().getServer()).getRegistryManager())), null);
             } catch (IllegalStateException e) {
                 LOGGER.error("Error while copying title JSON to clipboard", e);
             }
@@ -520,5 +527,11 @@ public class MainClient implements ClientModInitializer {
             }
         };
         timer.schedule(task, delayMs);
+    }
+
+    public static String getModVersion(String modId) {
+        ModMetadata modMetadata = FabricLoader.getInstance().getModContainer(modId).get().getMetadata();
+
+        return modMetadata.getVersion().getFriendlyString();
     }
 }

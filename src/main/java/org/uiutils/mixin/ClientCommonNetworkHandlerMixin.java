@@ -30,7 +30,7 @@ public abstract class ClientCommonNetworkHandlerMixin {
             this.sendPacket(new ResourcePackStatusC2SPacket(MinecraftClient.getInstance().getSession().getUuidOrNull(), ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));
             MainClient.LOGGER.info(
                     "[UI Utils]: Required Resource Pack Bypassed, Message: " +
-                            (packet.prompt() == null ? "<no message>" : packet.prompt().getString()) +
+                            (packet.prompt().isEmpty() ? "<no message>" : packet.prompt().toString()) +
                             ", URL: " + (packet.url() == null ? "<no url>" : packet.url())
             );
             ci.cancel();
