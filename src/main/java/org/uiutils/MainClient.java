@@ -29,7 +29,6 @@ import org.uiutils.mixin.accessor.ClientConnectionAccessor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
