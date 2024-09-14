@@ -1,4 +1,4 @@
-package org.uiutils.mixin.accessor;
+package com.ui_utils.mixin.accessor;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;

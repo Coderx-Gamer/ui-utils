@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "uiutils",
+  "id": "ui-utils",
   "version": "${version}",
 
   "name": "UI Utils",
@@ -14,27 +14,30 @@
     "sources": "https://github.com/Coderx-Gamer/ui-utils"
   },
 
-  "license": "CC BY-NC-SA 4.0",
-  "icon": "assets/uiutils/icon.png",
+  "license": [
+    "CC BY-NC-SA 4.0",
+    "The mod may not be uploaded to any mod hosting websites or other platforms, including but not limited to 9minecraft.net, without explicit written permission from MrBreakNFix and Coderx_Gamer. All rights reserved."
+  ],
+  "icon": "assets/ui_utils/icon.png",
 
   "environment": "client",
   "entrypoints": {
     "client": [
-      "org.uiutils.MainClient"
+      "com.ui_utils.MainClient"
     ]
   },
   "mixins": [
-    "uiutils.mixins.json"
+    "ui_utils.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.15.0",
+    "fabricloader": ">=0.16.0",
     "fabric": "*",
-    "minecraft": "~1.21",
+    "minecraft": "~1.21.1",
     "java": ">=17"
   },
 
-  "accessWidener": "uiutils.accesswidener",
+  "accessWidener": "ui_utils.accesswidener",
 
   "suggests": {
     "another-mod": "*"

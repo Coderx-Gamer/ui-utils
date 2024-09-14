@@ -1,9 +1,10 @@
-package org.uiutils;
+// UpdateUtils.java
+package com.ui_utils;
 
 import com.google.gson.Gson;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
-import org.uiutils.gui.UpdateScreen;
+import com.ui_utils.gui.UpdateScreen;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,14 +19,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 
-import static org.uiutils.MainClient.getModVersion;
+import static com.ui_utils.MainClient.getModVersion;
 
 public class UpdateUtils {
 
     public static boolean isOutdated;
     public static String version;
+    public static String mcVersion;
     public static boolean messageShown;
-    public static final String currentVersion = getModVersion("uiutils");
+    public static final String currentVersion = getModVersion("ui_utils");
 
     public static void checkForUpdates() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -41,6 +43,7 @@ public class UpdateUtils {
                 if (response.statusCode() == 200) {
                     Gson gson = new Gson();
                     GithubRelease release = gson.fromJson(response.body(), GithubRelease.class);
+                    mcVersion = release.getMcVersion();
                     return release.getTagName();
                 } else {
                     MainClient.LOGGER.error("Failed to fetch the latest version. Status code: " + response.statusCode());
@@ -83,4 +86,3 @@ public class UpdateUtils {
         MinecraftClient.getInstance().setScreen(new UpdateScreen(Text.empty()));
     }
 }
-

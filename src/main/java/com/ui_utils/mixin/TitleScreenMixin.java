@@ -1,4 +1,4 @@
-package org.uiutils.mixin;
+package com.ui_utils.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ButtonTextures;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.uiutils.UpdateUtils;
+import com.ui_utils.UpdateUtils;
 
 @Mixin(TitleScreen.class)
 public class TitleScreenMixin extends Screen {
@@ -29,7 +29,7 @@ public class TitleScreenMixin extends Screen {
             if (!UpdateUtils.messageShown) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 ToastManager toastManager = client.getToastManager();
-                Text title = Text.of("UI-Utils " + UpdateUtils.version + " is out!");
+                Text title = Text.of("UI-Utils " + UpdateUtils.version + " is out for " + UpdateUtils.mcVersion + "!");
                 Text description = Text.of("Download it from the top left corner!");
                 SystemToast.add(toastManager, new SystemToast.Type(30000L), title, description);
                 UpdateUtils.messageShown = true;
@@ -42,8 +42,8 @@ public class TitleScreenMixin extends Screen {
             ButtonWidget downloadUpdateButton = new TexturedButtonWidget(5, 5 - 3,
                     15, 15,
                     new ButtonTextures(
-                            Identifier.of("uiutils", "update"),
-                            Identifier.of("uiutils", "update_selected")
+                            Identifier.of("ui_utils", "update"),
+                            Identifier.of("ui_utils", "update_selected")
                     ),
                     (button) -> UpdateUtils.downloadUpdate(),
                     Text.of("Download Update"));

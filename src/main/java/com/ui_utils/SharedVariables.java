@@ -1,4 +1,4 @@
-package org.uiutils;
+package com.ui_utils;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.network.packet.Packet;

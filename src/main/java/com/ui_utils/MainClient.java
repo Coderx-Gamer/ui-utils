@@ -1,4 +1,4 @@
-package org.uiutils;
+package com.ui_utils;
 
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -25,11 +25,10 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uiutils.mixin.accessor.ClientConnectionAccessor;
+import com.ui_utils.mixin.accessor.ClientConnectionAccessor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -531,8 +530,8 @@ public class MainClient implements ClientModInitializer {
     }
 
     public static String getModVersion(String modId) {
-        ModMetadata modMetadata = FabricLoader.getInstance().getModContainer(modId).get().getMetadata();
+        ModMetadata modMetadata = FabricLoader.getInstance().getModContainer(modId).isPresent() ? FabricLoader.getInstance().getModContainer(modId).get().getMetadata() : null;
 
-        return modMetadata.getVersion().getFriendlyString();
+        return modMetadata != null ? modMetadata.getVersion().getFriendlyString() : "null";
     }
 }

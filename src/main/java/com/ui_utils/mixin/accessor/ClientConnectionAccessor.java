@@ -1,4 +1,4 @@
-package org.uiutils.mixin.accessor;
+package com.ui_utils.mixin.accessor;
 
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;

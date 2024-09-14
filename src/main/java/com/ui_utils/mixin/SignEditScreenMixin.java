@@ -1,4 +1,4 @@
-package org.uiutils.mixin;
+package com.ui_utils.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.uiutils.SharedVariables;
+import com.ui_utils.SharedVariables;
 
 @Mixin(SignEditScreen.class)
 public class SignEditScreenMixin extends Screen {

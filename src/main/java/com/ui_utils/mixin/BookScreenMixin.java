@@ -1,4 +1,4 @@
-package org.uiutils.mixin;
+package com.ui_utils.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.uiutils.MainClient;
-import org.uiutils.SharedVariables;
+import com.ui_utils.MainClient;
+import com.ui_utils.SharedVariables;
 
 import java.util.regex.Pattern;
 
@@ -24,14 +24,13 @@ public class BookScreenMixin extends Screen {
     @Unique
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-    private TextFieldWidget addressField;
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
         if (SharedVariables.enabled) {
             MainClient.createWidgets(mc, this);
 
             // create chat box
-            this.addressField = new TextFieldWidget(textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
+            TextFieldWidget addressField = new TextFieldWidget(textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                 @Override
                 public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                     if (keyCode == GLFW.GLFW_KEY_ENTER) {
@@ -58,10 +57,10 @@ public class BookScreenMixin extends Screen {
                     return super.keyPressed(keyCode, scanCode, modifiers);
                 }
             };
-            this.addressField.setText("");
-            this.addressField.setMaxLength(255);
+            addressField.setText("");
+            addressField.setMaxLength(255);
 
-            this.addDrawableChild(this.addressField);
+            this.addDrawableChild(addressField);
         }
     }
 }

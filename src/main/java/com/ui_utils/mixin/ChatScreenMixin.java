@@ -1,4 +1,4 @@
-package org.uiutils.mixin;
+package com.ui_utils.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.uiutils.MainClient;
-import org.uiutils.SharedVariables;
+import com.ui_utils.MainClient;
+import com.ui_utils.SharedVariables;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin {

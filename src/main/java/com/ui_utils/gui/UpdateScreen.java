@@ -1,4 +1,4 @@
-package org.uiutils.gui;
+package com.ui_utils.gui;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
