@@ -46,11 +46,6 @@ public class MainClient implements ClientModInitializer {
     public void onInitializeClient() {
         UpdateUtils.checkForUpdates();
 
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("mac") || os.contains("darwin") || os.contains("osx")) {
-            SharedVariables.isMac = true;
-        }
-
         // register "restore screen" key
         restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
 
@@ -66,7 +61,7 @@ public class MainClient implements ClientModInitializer {
         });
 
         // set java.awt.headless to false if os is not mac (allows for JFrame guis to be used)
-        if (!SharedVariables.isMac) {
+        if (!MinecraftClient.IS_SYSTEM_MAC) {
             System.setProperty("java.awt.headless", "false");
             monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
             darkWhite = new Color(220, 220, 220);
@@ -444,7 +439,7 @@ public class MainClient implements ClientModInitializer {
             frame.add(buttonClickButton);
             frame.setVisible(true);
         }).width(115).position(5, 185).build();
-        fabricatePacketButton.active = !SharedVariables.isMac;
+        fabricatePacketButton.active = !MinecraftClient.IS_SYSTEM_MAC;
         screen.addDrawableChild(fabricatePacketButton);
 
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {

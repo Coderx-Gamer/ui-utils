@@ -1,4 +1,3 @@
-// UpdateUtils.java
 package com.ui_utils;
 
 import com.google.gson.Gson;
@@ -27,7 +26,7 @@ public class UpdateUtils {
     public static String version;
     public static String mcVersion;
     public static boolean messageShown;
-    public static final String currentVersion = getModVersion("ui_utils");
+    public static final String currentVersion = getModVersion("ui-utils");
 
     public static void checkForUpdates() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -75,10 +74,10 @@ public class UpdateUtils {
         MainClient.LOGGER.info("Opening download link...");
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI("https://ui-utils.com?ref=ingame"));
+                Desktop.getDesktop().browse(new URI("https://ui-utils.com?ref=ingame&cv=" + currentVersion));
             } else {
                 Runtime runtime = Runtime.getRuntime();
-                runtime.exec(new String[]{"xdg-open", "https://ui-utils.com?ref=ingame"});
+                runtime.exec(new String[]{"xdg-open", "https://ui-utils.com?ref=ingame&cv=" + currentVersion});
             }
         } catch (IOException | URISyntaxException e) {
             MainClient.LOGGER.info(e.getLocalizedMessage(), Level.SEVERE);

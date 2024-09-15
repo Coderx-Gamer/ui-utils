@@ -17,7 +17,6 @@ public class SharedVariables {
     public static ScreenHandler storedScreenHandler = null;
 
     public static boolean enabled = true;
-    public static boolean isMac = false;
     public static boolean bypassResourcePack = false;
     public static boolean resourcePackForceDeny = false;
 }

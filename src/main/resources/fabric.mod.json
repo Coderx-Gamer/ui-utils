@@ -44,7 +44,9 @@
   },
 
   "breaks": {
-    "modernfix": "*"
+    "modernfix": "*",
+    "wurst": "*",
+    "essential": "*"
   },
 
   "custom": {
