@@ -1,5 +1,5 @@
 # UI-Utils
-Dupe hunting mod. May be incompatible with mac, needs Fabric API.
+Plugin debugging mod. May be incompatible with mac, needs Fabric API.
 ---
 
 # How to use:
