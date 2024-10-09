@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "UI Utils",
-  "description": "Dupe hunting mod.",
+  "description": "Plugin debugging mod.",
   "authors": [
     "Coderx_Gamer",
     "MrBreakNFix"
