@@ -15,5 +15,8 @@ UI-Utils is intended solely for debugging purposes on plugins you created and ha
 ## 5. Changes to Terms
 These Terms of Use may be updated from time to time. Continued use of the mod constitutes acceptance of any changes.
 
+## 6. License
+You may not violate the license, by reposting on blacklisted sites, or using in unauthorized situations.
+
 ## 6. Contact Information
 For any inquiries regarding these Terms of Use, please contact mrbreaknfix@gmail.com.
