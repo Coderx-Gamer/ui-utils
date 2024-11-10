@@ -23,8 +23,8 @@ public class TitleScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(at = @At("RETURN"), method = "initWidgetsNormal(II)V")
-    private void onInitWidgetsNormal(int Y, int spacingY, CallbackInfo ci) {
+    @Inject(at = @At("RETURN"), method = "init")
+    private void onInitWidgetsNormal(CallbackInfo ci) {
         if (UpdateUtils.isOutdated) {
             if (!UpdateUtils.messageShown) {
                 MinecraftClient client = MinecraftClient.getInstance();

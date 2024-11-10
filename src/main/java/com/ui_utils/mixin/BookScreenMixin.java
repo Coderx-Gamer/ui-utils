@@ -37,7 +37,7 @@ public class BookScreenMixin extends Screen {
                         if (this.getText().equals("^toggleuiutils")) {
                             SharedVariables.enabled = !SharedVariables.enabled;
                             if (mc.player != null) {
-                                mc.player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."));
+                                mc.player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."), false);
                             }
                             return false;
                         }

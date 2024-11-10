@@ -17,7 +17,7 @@ public class ChatScreenMixin {
         if (chatText.equals("^toggleuiutils")) {
             SharedVariables.enabled = !SharedVariables.enabled;
             if (MinecraftClient.getInstance().player != null) {
-                MinecraftClient.getInstance().player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."));
+                MinecraftClient.getInstance().player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."), false);
             } else {
                 MainClient.LOGGER.warn("Minecraft player was nulling while enabling / disabling UI Utils.");
             }

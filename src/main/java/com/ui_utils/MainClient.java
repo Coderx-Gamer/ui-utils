@@ -112,7 +112,7 @@ public class MainClient implements ClientModInitializer {
                     mc.getNetworkHandler().sendPacket(packet);
                 }
                 if (mc.player != null) {
-                    mc.player.sendMessage(Text.of("Sent " + SharedVariables.delayedUIPackets.size() + " packets."));
+                    mc.player.sendMessage(Text.of("Sent " + SharedVariables.delayedUIPackets.size() + " packets."), false);
                 }
                 SharedVariables.delayedUIPackets.clear();
             }
