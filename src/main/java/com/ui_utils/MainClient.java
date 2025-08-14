@@ -149,7 +149,7 @@ public class MainClient implements ClientModInitializer {
             // creates a gui allowing you to fabricate packets
 
             JFrame frame = new JFrame("Choose Packet");
-            frame.setBounds(0, 0, 450, 100);
+            frame.setBounds(0, 0, 600, 100);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setLayout(null);
@@ -437,8 +437,111 @@ public class MainClient implements ClientModInitializer {
                 buttonClickFrame.setVisible(true);
             });
 
+            JButton chatMessageButton = getPacketOptionButton("Chat Message");
+            chatMessageButton.setBounds(400, 25, 110, 20);
+            chatMessageButton.addActionListener((event) -> {
+                frame.setVisible(false);
+
+                JFrame chatMessageFrame = new JFrame("Chat Message Packet");
+                chatMessageFrame.setBounds(0, 0, 450, 250);
+                chatMessageFrame.setResizable(false);
+                chatMessageFrame.setLocationRelativeTo(null);
+                chatMessageFrame.setLayout(null);
+
+                JLabel messageLabel = new JLabel("Message:");
+                messageLabel.setFocusable(false);
+                messageLabel.setFont(monospace);
+                messageLabel.setBounds(25, 25, 100, 20);
+
+                JTextField messageField = new JTextField(1);
+                messageField.setFont(monospace);
+                messageField.setBounds(125, 25, 100, 20);
+
+                JLabel statusLabel = new JLabel();
+                statusLabel.setVisible(false);
+                statusLabel.setFocusable(false);
+                statusLabel.setFont(monospace);
+                statusLabel.setBounds(210, 95, 190, 20);
+
+                JCheckBox delayBox = new JCheckBox("Delay");
+                delayBox.setBounds(115, 95, 85, 20);
+                delayBox.setSelected(false);
+                delayBox.setFont(monospace);
+                delayBox.setFocusable(false);
+
+                JLabel timesToSendLabel = new JLabel("Times to send:");
+                timesToSendLabel.setFocusable(false);
+                timesToSendLabel.setFont(monospace);
+                timesToSendLabel.setBounds(25, 130, 100, 20);
+
+                JTextField timesToSendField = new JTextField("1");
+                timesToSendField.setFont(monospace);
+                timesToSendField.setBounds(125, 130, 100, 20);
+
+                JButton sendButton = new JButton("Send");
+                sendButton.setFocusable(false);
+                sendButton.setBounds(25, 95, 75, 20);
+                sendButton.setBorder(BorderFactory.createEtchedBorder());
+                sendButton.setBackground(darkWhite);
+                sendButton.setFont(monospace);
+                sendButton.addActionListener((event0) -> {
+                    if (
+                            (!messageField.getText().isEmpty()) &&
+                                    MainClient.isInteger(timesToSendField.getText())) {
+                        String message = messageField.getText();
+                        int timesToSend = Integer.parseInt(timesToSendField.getText());
+
+                        try {
+                            for (int i = 0; i < timesToSend; i++) {
+                                if (message.startsWith("/")) {
+                                    mc.getNetworkHandler().sendChatCommand(message.replaceFirst("/", ""));
+                                }
+                                else {
+                                    mc.getNetworkHandler().sendChatMessage(message);
+
+                                }
+                            }
+                        } catch (Exception e) {
+                            statusLabel.setVisible(true);
+                            statusLabel.setForeground(Color.RED.darker());
+                            statusLabel.setText("You must be connected to a server!");
+                            MainClient.queueTask(() -> {
+                                statusLabel.setVisible(false);
+                                statusLabel.setText("");
+                            }, 1500L);
+                            return;
+                        }
+                        statusLabel.setVisible(true);
+                        statusLabel.setForeground(Color.GREEN.darker());
+                        statusLabel.setText("Sent successfully!");
+                        MainClient.queueTask(() -> {
+                            statusLabel.setVisible(false);
+                            statusLabel.setText("");
+                        }, 1500L);
+                    } else {
+                        statusLabel.setVisible(true);
+                        statusLabel.setForeground(Color.RED.darker());
+                        statusLabel.setText("Invalid arguments!");
+                        MainClient.queueTask(() -> {
+                            statusLabel.setVisible(false);
+                            statusLabel.setText("");
+                        }, 1500L);
+                    }
+                });
+
+                chatMessageFrame.add(messageLabel);
+                chatMessageFrame.add(messageField);
+                chatMessageFrame.add(timesToSendLabel);
+                chatMessageFrame.add(sendButton);
+                chatMessageFrame.add(statusLabel);
+                chatMessageFrame.add(delayBox);
+                chatMessageFrame.add(timesToSendField);
+                chatMessageFrame.setVisible(true);
+            });
+
             frame.add(clickSlotButton);
             frame.add(buttonClickButton);
+            frame.add(chatMessageButton);
             frame.setVisible(true);
         }).width(115).position(5, 185).build();
         fabricatePacketButton.active = !MinecraftClient.IS_SYSTEM_MAC;

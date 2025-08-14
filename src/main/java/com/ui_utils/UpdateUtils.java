@@ -60,7 +60,7 @@ public class UpdateUtils {
             MainClient.LOGGER.info("Latest version: " + latestVersion + " Current version: " + currentVersion);
             version = latestVersion;
             if (latestVersion != null && !latestVersion.equals(currentVersion)) {
-                isOutdated = true;
+                //isOutdated = true;
             }
 
         } catch (Exception e) {
