@@ -24,6 +24,8 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.screen.sync.ItemStackHash;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
+import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -49,7 +51,7 @@ public class MainClient implements ClientModInitializer {
         UpdateUtils.checkForUpdates();
 
         // register "restore screen" key
-        restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
+        restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.ui-utils.restore-screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyBinding.Category.create(Identifier.of("ui-utils", "name"))));
 
         // register event for END_CLIENT_TICK
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
@@ -63,7 +65,7 @@ public class MainClient implements ClientModInitializer {
         });
 
         // set java.awt.headless to false if os is not mac (allows for JFrame guis to be used)
-        if (!MinecraftClient.IS_SYSTEM_MAC) {
+        if (!SystemUtils.IS_OS_MAC) {
             System.setProperty("java.awt.headless", "false");
             monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
             darkWhite = new Color(220, 220, 220);
@@ -441,7 +443,7 @@ public class MainClient implements ClientModInitializer {
             frame.add(buttonClickButton);
             frame.setVisible(true);
         }).width(115).position(5, 185).build();
-        fabricatePacketButton.active = !MinecraftClient.IS_SYSTEM_MAC;
+        fabricatePacketButton.active = !SystemUtils.IS_OS_MAC;
         screen.addDrawableChild(fabricatePacketButton);
 
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {
