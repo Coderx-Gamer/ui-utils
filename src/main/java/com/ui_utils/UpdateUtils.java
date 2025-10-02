@@ -59,7 +59,7 @@ public class UpdateUtils {
             String latestVersion = future.get();
             MainClient.LOGGER.info("Latest version: " + latestVersion + " Current version: " + currentVersion);
             version = latestVersion;
-            if (latestVersion != null && !latestVersion.equals(currentVersion)) {
+            if (latestVersion != null && isNewer(latestVersion, currentVersion)) {
                 isOutdated = true;
             }
 
@@ -68,6 +68,28 @@ public class UpdateUtils {
         } finally {
             executorService.shutdown();
         }
+    }
+
+    private static boolean isNewer(String latestVersion, String currentVersion) {
+        String[] latestParts = latestVersion.split("\\.");
+        String[] currentParts = currentVersion.split("\\.");
+        for (int i = 0; i < latestParts.length; i++) {
+            if (currentParts.length <= i) {
+                // Latest has additional version part, must be newer
+                return true;
+            }
+            try {
+                int latestNumber = Integer.parseInt(latestParts[i]);
+                int currentNumber = Integer.parseInt(currentParts[i]);
+                if (latestNumber > currentNumber) {
+                    return true;
+                }
+            } catch (NumberFormatException e) {
+                MainClient.LOGGER.warn("Unable to parse version string.", e);
+                return !latestVersion.equals(currentVersion);
+            }
+        }
+        return false;
     }
 
     public static void downloadUpdate() {
