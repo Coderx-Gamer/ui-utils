@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -29,7 +30,7 @@ public abstract class HandledScreenMixin extends Screen {
     }
 
     @Shadow
-    protected abstract boolean handleHotbarKeyPressed(int keyCode, int scanCode);
+    protected abstract boolean handleHotbarKeyPressed(KeyInput input);
     @Shadow
     protected abstract void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType);
     @Shadow
@@ -51,8 +52,8 @@ public abstract class HandledScreenMixin extends Screen {
             // create chat box
             this.addressField = new TextFieldWidget(this.textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                 @Override
-                public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-                    if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                public boolean keyPressed(KeyInput input) {
+                    if (input.getKeycode() == GLFW.GLFW_KEY_ENTER) {
                         if (this.getText().equals("^toggleuiutils")) {
                             SharedVariables.enabled = !SharedVariables.enabled;
                             if (mc.player != null) {
@@ -68,13 +69,13 @@ public abstract class HandledScreenMixin extends Screen {
                             } else {
                                 mc.getNetworkHandler().sendChatMessage(this.getText());
                             }
-                    } else {
+                        } else {
                             MainClient.LOGGER.warn("Minecraft network handler (mc.getNetworkHandler()) was null while trying to send chat message from UI Utils.");
                         }
 
                         this.setText("");
                     }
-                    return super.keyPressed(keyCode, scanCode, modifiers);
+                    return super.keyPressed(input);
                 }
             };
             this.addressField.setText("");
@@ -85,21 +86,21 @@ public abstract class HandledScreenMixin extends Screen {
     }
 
     @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
-    public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+    public void keyPressed(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
         cir.cancel();
-        if (super.keyPressed(keyCode, scanCode, modifiers)) {
+        if (super.keyPressed(input)) {
             cir.setReturnValue(true);
-        } else if (MainClient.mc.options.inventoryKey.matchesKey(keyCode, scanCode) && (this.addressField == null || !this.addressField.isSelected())) {
+        } else if (MainClient.mc.options.inventoryKey.matchesKey(input) && (this.addressField == null || !this.addressField.isSelected())) {
             // Crashes if address field does not exist (because of ui utils disabled, this is a temporary fix.)
             this.close();
             cir.setReturnValue(true);
         } else {
-            this.handleHotbarKeyPressed(keyCode, scanCode);
+            this.handleHotbarKeyPressed(input);
             if (this.focusedSlot != null && this.focusedSlot.hasStack()) {
-                if (mc.options.pickItemKey.matchesKey(keyCode, scanCode)) {
+                if (mc.options.pickItemKey.matchesKey(input)) {
                     this.onMouseClick(this.focusedSlot, this.focusedSlot.id, 0, SlotActionType.CLONE);
-                } else if (mc.options.dropKey.matchesKey(keyCode, scanCode)) {
-                    this.onMouseClick(this.focusedSlot, this.focusedSlot.id, hasControlDown() ? 1 : 0, SlotActionType.THROW);
+                } else if (mc.options.dropKey.matchesKey(input)) {
+                    this.onMouseClick(this.focusedSlot, this.focusedSlot.id, input.hasCtrl() ? 1 : 0, SlotActionType.THROW);
                 }
             }
 
