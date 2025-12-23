@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.BookScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,8 +33,8 @@ public class BookScreenMixin extends Screen {
             // create chat box
             TextFieldWidget addressField = new TextFieldWidget(textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                 @Override
-                public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-                    if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                public boolean keyPressed(KeyInput keyInput) {
+                    if (keyInput.key() == GLFW.GLFW_KEY_ENTER) {
                         if (this.getText().equals("^toggleuiutils")) {
                             SharedVariables.enabled = !SharedVariables.enabled;
                             if (mc.player != null) {
@@ -54,7 +55,7 @@ public class BookScreenMixin extends Screen {
 
                         this.setText("");
                     }
-                    return super.keyPressed(keyCode, scanCode, modifiers);
+                    return super.keyPressed(keyInput);
                 }
             };
             addressField.setText("");

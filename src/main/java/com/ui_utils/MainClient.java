@@ -17,6 +17,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.network.packet.c2s.play.ButtonClickC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import net.minecraft.network.packet.c2s.play.CloseHandledScreenC2SPacket;
@@ -40,6 +42,8 @@ public class MainClient implements ClientModInitializer {
     public static Font monospace;
     public static Color darkWhite;
 
+    private static final KeyBinding.Category UI_UTILS_CATEGORY =
+        KeyBinding.Category.create(Identifier.of("ui-utils", "main"));
     public static KeyBinding restoreScreenKey;
 
     public static Logger LOGGER = LoggerFactory.getLogger("ui-utils");
@@ -49,7 +53,7 @@ public class MainClient implements ClientModInitializer {
         UpdateUtils.checkForUpdates();
 
         // register "restore screen" key
-        restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "UI Utils"));
+        restoreScreenKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Restore Screen", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, UI_UTILS_CATEGORY));
 
         // register event for END_CLIENT_TICK
         ClientTickEvents.END_CLIENT_TICK.register((client) -> {
@@ -63,7 +67,7 @@ public class MainClient implements ClientModInitializer {
         });
 
         // set java.awt.headless to false if os is not mac (allows for JFrame guis to be used)
-        if (!MinecraftClient.IS_SYSTEM_MAC) {
+        if (Util.getOperatingSystem() != Util.OperatingSystem.OSX) {
             System.setProperty("java.awt.headless", "false");
             monospace = new Font(Font.MONOSPACED, Font.PLAIN, 10);
             darkWhite = new Color(220, 220, 220);
@@ -441,7 +445,7 @@ public class MainClient implements ClientModInitializer {
             frame.add(buttonClickButton);
             frame.setVisible(true);
         }).width(115).position(5, 185).build();
-        fabricatePacketButton.active = !MinecraftClient.IS_SYSTEM_MAC;
+        fabricatePacketButton.active = Util.getOperatingSystem() != Util.OperatingSystem.OSX;
         screen.addDrawableChild(fabricatePacketButton);
 
         screen.addDrawableChild(ButtonWidget.builder(Text.of("Copy GUI Title JSON"), (button) -> {

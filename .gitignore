@@ -176,3 +176,4 @@ bin/
 .vscode/
 run/
 .idea/
+.claude/
