@@ -35,8 +35,8 @@ Fabric mod for debugging server GUIs and packets. Supports Minecraft 1.21 - 1.21
 | 1.21.5 | [ui_utils-2.4.1-mc1.21.5.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.5.jar) |
 | 1.21.6 | [ui_utils-2.4.1-mc1.21.6.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.6.jar) |
 | 1.21.7 | [ui_utils-2.4.1-mc1.21.7.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.7.jar) |
-| 1.21.8 | [ui_utils-2.4.1-mc1.21.8.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.7.jar) |
-| 1.21.11 | [ui_utils-2.4.1-mc1.21.11.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.7.jar) |
+| 1.21.8 | [ui_utils-2.4.1-mc1.21.8.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.8.jar) |
+| 1.21.11 | [ui_utils-2.4.1-mc1.21.11.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.11.jar) |
 
 > **Note:** Versions 1.21.9-1.21.10 are not yet supported due to incomplete Fabric yarn mappings.
 
