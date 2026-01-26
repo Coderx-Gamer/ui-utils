@@ -7,7 +7,7 @@ Thank you for your interest in contributing to UI-Utils Advanced! This is a **fo
 ## About This Fork
 
 This project is based on the original UI-Utils mod. We maintain compatibility with the original while adding:
-- Multi-version support (1.21 - 1.21.7)
+- Multi-version support (1.21 - 1.21.11)
 - ViaFabricPlus integration
 - Additional packet manipulation features
 - Improved UI and user experience
@@ -120,7 +120,7 @@ private static PlayerMoveC2SPacket createOnGroundPacket(boolean onGround) {
 
 ## Multi-Version Compatibility
 
-UI-Utils supports Minecraft 1.21 through 1.21.7. When contributing:
+UI-Utils supports Minecraft 1.21 through 1.21.11. When contributing:
 
 1. **Use reflection** for API differences between versions
 2. **Test on multiple versions** when possible
@@ -240,3 +240,4 @@ If you have questions about contributing:
 ---
 
 Thank you for contributing to UI-Utils Advanced! 🎮
+
