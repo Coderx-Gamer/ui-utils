@@ -6,10 +6,11 @@ Fabric mod for debugging server GUIs and packets. Supports Minecraft 1.21 - 1.21
 
 ## Screenshots
 
-<!-- Add your screenshots here -->
-<!-- ![Main Menu](images/main_menu.png) -->
-<!-- ![Inventory Overlay](images/inventory_overlay.png) -->
-<!-- ![Multiplayer Screen](images/multiplayer_screen.png) -->
+<img width="1359" height="713" alt="image" src="https://github.com/user-attachments/assets/b9a97dae-f552-4d80-bbe8-d39e78c3d2f1" />
+<img width="1359" height="714" alt="image" src="https://github.com/user-attachments/assets/39b733bd-81ce-497f-888e-d4f038e5cf66" />
+<img width="1359" height="717" alt="image" src="https://github.com/user-attachments/assets/4e0d69b3-f2c3-45b3-9e71-bc59f85c28e7" />
+<img width="462" height="719" alt="image" src="https://github.com/user-attachments/assets/fd090f99-ec1c-43a1-b2db-7108d0f7ef66" />
+
 
 ---
 
