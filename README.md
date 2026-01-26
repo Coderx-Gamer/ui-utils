@@ -1,6 +1,6 @@
 # UI-Utils
 
-Fabric mod for debugging server GUIs and packets. Supports Minecraft 1.21 - 1.21.x.
+Fabric mod for debugging server GUIs and packets. Supports Minecraft 1.21 - 1.21.7.
 
 ---
 
