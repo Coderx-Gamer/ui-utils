@@ -263,7 +263,7 @@ Type `,toggleuiutils` in chat or any GUI chat input to enable or disable the mod
 .\build-all.bat
 ```
 
-Output JARs will be in `build/libs/` (single) or `build/multiversion/` (all versions).
+Output JARs will be in `build/libs/` (single) or `releases` (all versions).
 
 ---
 
