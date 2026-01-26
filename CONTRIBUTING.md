@@ -239,5 +239,6 @@ If you have questions about contributing:
 
 ---
 
-Thank you for contributing to UI-Utils Advanced! 🎮
+Thank you for contributing to UI-Utils Advanced!
+
 
