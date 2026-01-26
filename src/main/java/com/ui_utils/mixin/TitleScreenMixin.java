@@ -1,16 +1,14 @@
 package com.ui_utils.mixin;
 
+import com.ui_utils.gui.CustomButtonWidget;
+import com.ui_utils.gui.UITheme;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ButtonTextures;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,26 +27,13 @@ public class TitleScreenMixin extends Screen {
             if (!UpdateUtils.messageShown) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 ToastManager toastManager = client.getToastManager();
-                Text title = Text.of("UI-Utils " + UpdateUtils.version + " is out for " + UpdateUtils.mcVersion + "!");
-                Text description = Text.of("Download it from the top left corner!");
+                Text title = Text.of("UI-Utils " + UpdateUtils.version + " available!");
+                Text description = Text.of("Click update button to download");
                 SystemToast.add(toastManager, new SystemToast.Type(30000L), title, description);
                 UpdateUtils.messageShown = true;
             }
 
-            Text message = Text.of("Download UI-Utils " + UpdateUtils.version + "!");
-
-            this.addDrawableChild(new TextWidget(40 - 15, 5, textRenderer.getWidth(message), textRenderer.fontHeight, message, textRenderer));
-
-            ButtonWidget downloadUpdateButton = new TexturedButtonWidget(5, 5 - 3,
-                    15, 15,
-                    new ButtonTextures(
-                            Identifier.of("ui_utils", "update"),
-                            Identifier.of("ui_utils", "update_selected")
-                    ),
-                    (button) -> UpdateUtils.downloadUpdate(),
-                    Text.of("Download Update"));
-            this.addDrawableChild(downloadUpdateButton);
-
+            this.addDrawableChild(CustomButtonWidget.createSmall(4, 4, 80, Text.of("Update v" + UpdateUtils.version), (button) -> UpdateUtils.downloadUpdate()));
         }
     }
 }

@@ -33,7 +33,7 @@ public class UpdateUtils {
         Callable<String> task = () -> {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.github.com/repos/Coderx-Gamer/ui-utils/releases/latest"))
+                    .uri(URI.create("https://api.github.com/repos/FrannnnDev/ui-utils-advanced/releases/latest"))
                     .header("Accept", "application/vnd.github.v3+json")
                     .build();
 
@@ -72,12 +72,13 @@ public class UpdateUtils {
 
     public static void downloadUpdate() {
         MainClient.LOGGER.info("Opening download link...");
+        String downloadUrl = "https://github.com/FrannnnDev/ui-utils-advanced/releases/latest";
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                Desktop.getDesktop().browse(new URI("https://ui-utils.com?ref=ingame&cv=" + currentVersion));
+                Desktop.getDesktop().browse(new URI(downloadUrl));
             } else {
                 Runtime runtime = Runtime.getRuntime();
-                runtime.exec(new String[]{"xdg-open", "https://ui-utils.com?ref=ingame&cv=" + currentVersion});
+                runtime.exec(new String[]{"xdg-open", downloadUrl});
             }
         } catch (IOException | URISyntaxException e) {
             MainClient.LOGGER.info(e.getLocalizedMessage(), Level.SEVERE);

@@ -1,9 +1,9 @@
 package com.ui_utils.mixin;
 
+import com.ui_utils.gui.CustomButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.SignEditScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -21,22 +21,18 @@ public class SignEditScreenMixin extends Screen {
     @Unique
     private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-    // called when any sign edit screen is created
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
-
-        // register "close without packet" button for SignEditScreen if ui utils is enabled
         if (SharedVariables.enabled) {
-            addDrawableChild(ButtonWidget.builder(Text.of("Close without packet"), (button) -> {
-                // disables sign editing and closes the current gui without sending a packet
+            addDrawableChild(CustomButtonWidget.create(4, 4, 95, Text.of("Close silent"), (button) -> {
                 SharedVariables.shouldEditSign = false;
                 mc.setScreen(null);
-            }).width(115).position(5, 5).build());
-            addDrawableChild(ButtonWidget.builder(Text.of("Disconnect"), (button) -> {
+            }));
+            addDrawableChild(CustomButtonWidget.create(4, 24, 95, Text.of("Disconnect"), (button) -> {
                 if (mc.getNetworkHandler() != null) {
-                    mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting (UI-UTILS)"));
+                    mc.getNetworkHandler().getConnection().disconnect(Text.of("Disconnecting"));
                 }
-            }).width(115).position(5, 35).build());
+            }));
         }
     }
 }

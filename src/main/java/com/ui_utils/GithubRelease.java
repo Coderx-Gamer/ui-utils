@@ -14,7 +14,6 @@ public class GithubRelease {
     private String name;
 
     public String getMcVersion() {
-        // in name, return the text within the ()
         return name.substring(name.indexOf("(") + 1, name.indexOf(")"));
     }
 }
