@@ -1,10 +1,12 @@
 package com.ui_utils.mixin;
 
+import com.ui_utils.gui.ChatTextFieldWidget;
+import com.ui_utils.gui.CustomTextFieldWidget;
+import com.ui_utils.gui.UITheme;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -38,61 +40,44 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Unique
     private static final MinecraftClient mc = MinecraftClient.getInstance();
-
     @Unique
-    private TextFieldWidget addressField;
+    private CustomTextFieldWidget chatField;
 
-    // called when creating a HandledScreen
     @Inject(at = @At("TAIL"), method = "init")
     public void init(CallbackInfo ci) {
         if (SharedVariables.enabled) {
             MainClient.createWidgets(mc, this);
 
-            // create chat box
-            this.addressField = new TextFieldWidget(this.textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
-                @Override
-                public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-                    if (keyCode == GLFW.GLFW_KEY_ENTER) {
-                        if (this.getText().equals("^toggleuiutils")) {
-                            SharedVariables.enabled = !SharedVariables.enabled;
-                            if (mc.player != null) {
-                                mc.player.sendMessage(Text.of("UI-Utils is now " + (SharedVariables.enabled ? "enabled" : "disabled") + "."), false);
-
-                            }
-                            return false;
-                        }
-
-                        if (mc.getNetworkHandler() != null) {
-                            if (this.getText().startsWith("/")) {
-                                mc.getNetworkHandler().sendChatCommand(this.getText().replaceFirst(Pattern.quote("/"), ""));
-                            } else {
-                                mc.getNetworkHandler().sendChatMessage(this.getText());
-                            }
-                    } else {
-                            MainClient.LOGGER.warn("Minecraft network handler (mc.getNetworkHandler()) was null while trying to send chat message from UI Utils.");
-                        }
-
-                        this.setText("");
-                    }
-                    return super.keyPressed(keyCode, scanCode, modifiers);
-                }
-            };
-            this.addressField.setText("");
-            this.addressField.setMaxLength(256);
-
-            this.addDrawableChild(this.addressField);
+            this.chatField = new ChatTextFieldWidget(this.textRenderer, 6, this.height - 18, 140, 12, Text.of("Chat..."));
+            this.chatField.setText("");
+            this.chatField.setMaxLength(256);
+            this.addDrawableChild(this.chatField);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "keyPressed", cancellable = true)
     public void keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        cir.cancel();
+        if (this.chatField != null && this.chatField.isFocused()) {
+            if (this.chatField.keyPressed(keyCode, scanCode, modifiers)) {
+                cir.setReturnValue(true);
+                return;
+            }
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                this.chatField.setFocused(false);
+                cir.setReturnValue(true);
+                return;
+            }
+            cir.setReturnValue(true);
+            return;
+        }
+        
         if (super.keyPressed(keyCode, scanCode, modifiers)) {
             cir.setReturnValue(true);
-        } else if (MainClient.mc.options.inventoryKey.matchesKey(keyCode, scanCode) && (this.addressField == null || !this.addressField.isSelected())) {
-            // Crashes if address field does not exist (because of ui utils disabled, this is a temporary fix.)
+            cir.cancel();
+        } else if (MainClient.mc.options.inventoryKey.matchesKey(keyCode, scanCode)) {
             this.close();
             cir.setReturnValue(true);
+            cir.cancel();
         } else {
             this.handleHotbarKeyPressed(keyCode, scanCode);
             if (this.focusedSlot != null && this.focusedSlot.hasStack()) {
@@ -102,17 +87,19 @@ public abstract class HandledScreenMixin extends Screen {
                     this.onMouseClick(this.focusedSlot, this.focusedSlot.id, hasControlDown() ? 1 : 0, SlotActionType.THROW);
                 }
             }
-
-            cir.setReturnValue(true);
         }
     }
 
-    // inject at the end of the render method
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        if (this.chatField != null && this.chatField.isFocused()) {
+            return this.chatField.charTyped(chr, modifiers);
+        }
+        return super.charTyped(chr, modifiers);
+    }
+
     @Inject(at = @At("TAIL"), method = "render")
     public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        // display sync id, revision, if ui utils is enabled
-        // this hurts me physically to look at this in a render method :(
-        // im too lazy to fix it tho :D
         if (SharedVariables.enabled) {
             MainClient.createText(mc, context, this.textRenderer);
         }

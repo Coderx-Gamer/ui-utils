@@ -1,142 +1,272 @@
 # UI-Utils
-Plugin debugging mod. May be incompatible with mac, needs Fabric API.
----
 
-# How to use:
+Fabric mod for debugging server GUIs and packets. Supports Minecraft 1.21 - 1.21.11.
 
 ---
 
-- Open any inventory / container with the mod, and you should see some buttons and a text field.
+## Screenshots
 
-![image](images/gui.png)
+<img width="1359" height="713" alt="image" src="https://github.com/user-attachments/assets/b9a97dae-f552-4d80-bbe8-d39e78c3d2f1" />
+<img width="1359" height="714" alt="image" src="https://github.com/user-attachments/assets/39b733bd-81ce-497f-888e-d4f038e5cf66" />
+<img width="1359" height="717" alt="image" src="https://github.com/user-attachments/assets/4e0d69b3-f2c3-45b3-9e71-bc59f85c28e7" />
+<img width="462" height="719" alt="image" src="https://github.com/user-attachments/assets/fd090f99-ec1c-43a1-b2db-7108d0f7ef66" />
 
-- "Close without packet" closes your current GUI (ScreenHandler) without sending a `CloseHandledScreenC2SPacket` to the server.
-
-- "De-sync" closes your current GUI server-side and keeps it open client-side.
-
-- "Send packets: true/false" tells the client whether it should send any `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s).
-
-- "Delay packets: true/false" when turned on it will store all `ClickSlotC2SPacket`(s) and `ButtonClickC2SPacket`(s) into a list and will not send them immediately until turned off which sends them all at once.
-
-- "Save GUI" saves your current GUI to a variable and can be accessed by pressing a keybinding in the keybinding options (default key is 'V').
-
-- "Disconnect and send packets" will if "Delay packets" is turned on send the list of stored packets immediately and then disconnect right afterward (can create potential race conditions on non-vanilla servers).
-
-- "Sync Id: ??" is a number used internally to sync various GUI related packets.
-
-- "Revision: ??" is a number used internally to sync various GUI related packets sent from the server to the client.
-
-- "Fabricate packet" allows you to create a custom `ClickSlotC2SPacket` and `ButtonClickC2SPacket` within a window it creates.
-
-- "Copy GUI Title JSON" copies the name of your current GUI in JSON format.
-
-- The text box is a chat field for chatting or running commands while in a GUI.
 
 ---
 
-### Fabricate packet tutorial:
+## Credits
+
+| Role | Author | Link |
+|------|--------|------|
+| Original Creator | Coderx-Gamer | [GitHub](https://github.com/Coderx-Gamer/ui-utils) |
+| Modified by | FrannnDev | [GitHub](https://github.com/FrannnnDev) |
 
 ---
 
-- `ClickSlotC2SPacket`(s) are what the client sends to the server when clicking any slot in a GUI (e.g. shift clicking an item).
+## Downloads
 
-- When clicking the "Fabricate packet" button you should see this window appear (may not work on OSX):
+| Minecraft | Download |
+|-----------|----------|
+| 1.21 | [ui_utils-2.4.1-mc1.21.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.jar) |
+| 1.21.1 | [ui_utils-2.4.1-mc1.21.1.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.1.jar) |
+| 1.21.2 | [ui_utils-2.4.1-mc1.21.2.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.2.jar) |
+| 1.21.3 | [ui_utils-2.4.1-mc1.21.3.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.3.jar) |
+| 1.21.4 | [ui_utils-2.4.1-mc1.21.4.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.4.jar) |
+| 1.21.5 | [ui_utils-2.4.1-mc1.21.5.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.5.jar) |
+| 1.21.6 | [ui_utils-2.4.1-mc1.21.6.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.6.jar) |
+| 1.21.7 | [ui_utils-2.4.1-mc1.21.7.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.7.jar) |
+| 1.21.8 | [ui_utils-2.4.1-mc1.21.8.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.8.jar) |
+| 1.21.11 | [ui_utils-2.4.1-mc1.21.11.jar](https://github.com/FrannnnDev/ui-utils-advanced/releases/download/v2.4.1/ui_utils-2.4.1-mc1.21.11.jar) |
 
-![image](images/packet_option.png)
-
-- Clicking "Click Slot" will open up this window:
-
-![image](images/click_slot_packet.png)
-
-- Enter the "Sync Id" and "Revision" value you see in the in-game GUI to the "Click Slot Packet" GUI.
-
-- The "Slot" value should be set to what slot you would like to click (starting from 0) you can generally find the location of GUI slots on Google for generic GUI(s), e.g. double chest:
-
- ![image](images/slots.png)
-
-- The "Button" field should be set to either: (0 is a left-click, 1 is a right-click, 0-8 and 40 will be explained below).
-
-- The "Action" field should be set to one of these options,
-
-![image](images/click_slot_actions.png)
-
-- "PICKUP" puts the item on the slot field on your cursor or vice versa, "QUICK_MOVE" is a shift click, "SWAP" acts as a hotbar or offhand swap (e.g. if your "Action" is set to "SWAP" and the "Button" set to 0-8, it will swap the item in the "Slot" field to one of those hotbar slots (starting from 0) or vice versa, "Button" being set to 40 will swap the item in the "Slot" field to your offhand or vice versa), "CLONE" acts as a middle click to clone items (only works in creative mode), "THROW" drops the item in the "Slot" field, "QUICK_CRAFT" is a bit complicated, so you will have to experiment yourself or look into some code for it, "PICKUP_ALL" will pick up all the items matching to the item on your cursor, as long as "Slot" is within bounds of that GUI.
-
-- The "Send" button will send the packet for with all the info you inputted and will give a response if it was successful or failed to send the packet you provided.
-
-- The "Times to send" field tells the client how many times to send that packet when pressing "Send".
-
-- The delay checkbox tells the client if the packet should wait while "Delay Packets" is on.
+> **Note:** Versions 1.21.9-1.21.10 are not yet supported due to incomplete Fabric yarn mappings.
 
 ---
 
-- Example of this feature:
+## Installation
 
-![image](images/click_slot_example.png)
-
-- When clicking "Send" in the above image, it should drop the bedrock item on the ground.
-
-![image](images/click_slot_example_2.png)
-
-
-- Fabricate packet tutorial (Button Click):
----
-
-- `ButtonClickC2SPacket`(s) are what the client sends to the server when clicking a button in a server-side GUI (e.g. clicking an enchantment in an enchantment table).
-
-- When clicking the "Fabricate packet" button you should see this window appear:
-
-![image](images/packet_option.png)
-
-- Clicking "Button Click" will open up this window:
-
-![image](images/button_click_packet.png)
-
-- Enter the "Sync Id" field in the "Button Click Packet" GUI as the "Sync Id" value you will see in the in-game GUI.
-
-- Enter the "Button Id" field as what button you would like to click in a GUI (starting from 0.)
-
-- Enter into the field "Times to send" (by default it's one) the amount of packets you would like to send.
-
-- Check the "Delay" checkbox if you would like to delay your packet while "Delay Packets" is on.
-
-- Example of this feature:
----
-
-![image](images/enchant.png)
-
-![image](images/enchant_2.png)
-
-![image](images/enchant_3.png)
+1. Install Fabric Loader
+2. Drop the mod JAR into your `mods` folder (Fabric API is already included)
+3. (Optional) Install [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) for multi-version support
 
 ---
 
-## "^toggleuiutils" command:
+## Inventory Overlay (E Menu)
+
+Open any inventory to see the UI-Utils overlay on the left side.
+
+### Info Panel
+
+Located at the top-right of the overlay:
+
+| Field | Description |
+|-------|-------------|
+| Sync | Current screen handler sync ID used by packets |
+| Rev | Current revision number for packet validation |
+
+### Button List
+
+| Button | Description |
+|--------|-------------|
+| Close without packet | Closes GUI client-side only. Server thinks GUI is still open |
+| Desync | Sends close packet to server but keeps GUI open client-side |
+| Send packets: true/false | Toggle whether click packets are sent to server |
+| Delay packets: true/false | When ON, stores all click packets in queue instead of sending |
+| Leave & Send Packets | Sends all queued packets at once, then closes GUI |
+| Fabricate packet | Opens external window to create custom packets (not available on Mac) |
+| Copy GUI Title JSON | Copies current GUI title as JSON to clipboard |
+| Save GUI / Load GUI | Save current GUI state to memory or restore it |
+| Clear Queue / Queue: N | Clear all queued packets or show current queue count |
+| Resync Inv / Disconnect | Force inventory resync or disconnect from server |
+| [-] Spam (xN) [+] | Send all queued packets N times. Use - and + to adjust multiplier |
+| Send One / Pop Last | Send first packet from queue or remove last packet without sending |
+
+### Chat Input
+
+At the bottom-left of any GUI there is a chat input field:
+
+- Type messages --> sends to server chat
+- Start with `/` --> sends as server command
+- Start with `,` --> executes UI-Utils command
 
 ---
-- Enables/Disables UI-Utils in-game GUI rendering.
+
+## Multiplayer Screen
+
+Custom buttons appear at the top of the multiplayer server list.
+
+### Left Side - Resource Pack
+
+| Button | Description |
+|--------|-------------|
+| Bypass | Bypass required resource packs. Tells server pack was loaded without downloading. Green when active |
+| Deny | Force deny all resource packs. Use if Bypass alone still kicks you. Green when active |
+
+### Right Side - Utilities
+
+| Button | Description |
+|--------|-------------|
+| User | Opens popup to change session username. Temporary until game restart |
+| Via+ | Opens ViaFabricPlus version selector. Requires ViaFabricPlus mod installed |
+
 ---
 
-## Resource Pack Bypassing
+## Keybinds
+
+| Key | Action |
+|-----|--------|
+| V | Load saved GUI (configurable in controls menu) |
 
 ---
 
-You can bypass a required resource pack on a server by turning on "Bypass Resource Pack" in the multiplayer screen, if you still get kicked, enable "Force Deny", which will block all resource packs.
+## Commands
+
+All commands use `,` prefix by default. Change with `,prefix <new>`.
+
+### General
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| help | `,help [command]` | List all commands or show help for specific command |
+| man | `,man <command>` | Show detailed manual for a command |
+| toggleuiutils | `,toggleuiutils` | Toggle UI-Utils overlay on/off |
+| prefix | `,prefix [new]` | View or change command prefix |
+| echo | `,echo <text>` | Print text to chat (client-side only) |
+
+### Math
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| math | `,math <expression>` | Calculate math expression. Supports + - * / ^ () |
+
+Example:
+```
+,math 2+2*3
+--> Result: 8.0
+```
+
+### Screen Control
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| close | `,close` | Close current screen without sending packet |
+| desync | `,desync` | Send close packet but keep GUI open client-side |
+
+### Chat
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| chat | `,chat <message>` | Send message or command to server from anywhere |
+
+Example:
+```
+,chat /spawn
+--> Sends /spawn command to server
+```
+
+### Server
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| joinserver | `,joinserver <ip[:port]>` | Connect to another server |
+| plugins | `,plugins` | Scan server plugins via tab-complete exploit |
+
+Plugins output:
+- Normal plugins --> red text
+- Anticheats/exploit-related --> dark red text
+
+### Screen Management
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| screen save | `,screen save <slot>` | Save current screen to named slot |
+| screen load | `,screen load <slot>` | Load saved screen from slot |
+| screen list | `,screen list` | List all saved screen slots |
+| screen info | `,screen info <slot>` | Show info about saved screen |
+
+### Account
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| account dump | `,account dump` | Show current username and UUID |
+| account set username | `,account set username <name>` | Change session username |
+| account set uuid | `,account set uuid <uuid>` | Change session UUID |
+
+Note: Account changes are temporary and reset on game restart.
+
+### Movement
+
+| Command | Usage | Description |
+|---------|-------|-------------|
+| vclip | `,vclip <blocks>` | Teleport vertically. Positive = up, negative = down |
+| hclip | `,hclip <blocks>` | Teleport horizontally in look direction |
+
+Examples:
+```
+,vclip 5
+--> Teleport 5 blocks up
+
+,vclip -3
+--> Teleport 3 blocks down
+
+,hclip 10
+--> Teleport 10 blocks forward
+```
 
 ---
 
-## Building:
+## Fabricate Packet
+
+External window for creating custom packets.
+
+### ClickSlotC2SPacket
+
+Used for clicking slots in GUIs.
+
+| Field | Description |
+|-------|-------------|
+| Sync Id | From overlay info panel |
+| Revision | From overlay info panel |
+| Slot | Slot number to click (starts at 0) |
+| Button | 0 = left click, 1 = right click, 0-8 = hotbar slot, 40 = offhand |
+| Action | PICKUP, QUICK_MOVE, SWAP, CLONE, THROW, QUICK_CRAFT, PICKUP_ALL |
+| Times to send | Number of packets to send |
+| Delay | Check to add packet to delay queue instead of sending |
+
+### ButtonClickC2SPacket
+
+Used for clicking buttons in server GUIs (enchantment tables, stonecutters, etc).
+
+| Field | Description |
+|-------|-------------|
+| Sync Id | From overlay info panel |
+| Button Id | Button number to click (starts at 0) |
+| Times to send | Number of packets to send |
+| Delay | Check to add packet to delay queue instead of sending |
 
 ---
 
-You can find building instructions on the UI-Utils website (https://ui-utils.com).
+## Toggle
+
+Type `,toggleuiutils` in chat or any GUI chat input to enable or disable the mod overlay.
 
 ---
 
-This mod concept is not an original idea, there are similar mods out there that have similar features, the goal of this mod is to be on the latest version and have some additional features.
+## Building
 
-Some images here may be outdated.
+### Single Version
+```
+.\gradlew build
+```
 
-Note that mac may work with most of the mod but not the fabricate packet feature potentially.
+### All Versions
+```
+.\build-all.bat
+```
 
-That's all the features for this mod currently, there may be more updates in the future but I cannot guarantee.
+Output JARs will be in `build/libs/` (single) or `releases` (all versions).
+
+---
+
+## License
+
+This mod is licensed under CC BY-NC-SA 4.0. See [LICENSE](LICENSE) file.

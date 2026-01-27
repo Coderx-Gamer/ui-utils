@@ -1,12 +1,10 @@
 package com.ui_utils.gui;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
 
 public class UpdateScreen extends Screen {
-
     public UpdateScreen(Text title) {
         super(title);
     }
@@ -14,23 +12,34 @@ public class UpdateScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        Text message1 = Text.of("In order to update UI-Utils, first quit the game then");
-        Text message2 = Text.of("delete the old UI-Utils jar file, and replace it with the new one you got on the website.");
         int centerX = this.width / 2;
+        int btnWidth = 70;
+        int spacing = 8;
 
-        this.addDrawableChild(new TextWidget(centerX - textRenderer.getWidth(message1) / 2, 80, textRenderer.getWidth(message1), 20, message1, this.textRenderer));
-        this.addDrawableChild(new TextWidget(centerX - textRenderer.getWidth(message2) / 2, 95, textRenderer.getWidth(message2), 20, Text.of(message2), this.textRenderer));
-
-        int quitX = centerX - 85;
-        int backX = centerX + 5;
-
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Quit"), (button) -> {
+        this.addDrawableChild(CustomButtonWidget.create(centerX - btnWidth - spacing / 2, 130, btnWidth, Text.of("Quit"), (button) -> {
             this.client.stop();
-        }).width(80).position(quitX, 145).build());
+        }));
 
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Back"), (button) -> {
+        this.addDrawableChild(CustomButtonWidget.create(centerX + spacing / 2, 130, btnWidth, Text.of("Back"), (button) -> {
             this.client.setScreen(null);
-        }).width(80).position(backX, 145).build());
+        }));
     }
 
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        int centerX = this.width / 2;
+
+        UITheme.drawPanelWithAccent(context, centerX - 170, 60, 340, 100);
+
+        String line1 = "To update UI-Utils:";
+        String line2 = "1. Quit the game";
+        String line3 = "2. Delete old UI-Utils jar";
+        String line4 = "3. Add the new jar to mods folder";
+
+        context.drawCenteredTextWithShadow(this.textRenderer, line1, centerX, 72, UITheme.TEXT);
+        context.drawText(this.textRenderer, line2, centerX - 155, 90, UITheme.TEXT_DIM, false);
+        context.drawText(this.textRenderer, line3, centerX - 155, 103, UITheme.TEXT_DIM, false);
+        context.drawText(this.textRenderer, line4, centerX - 155, 116, UITheme.TEXT_DIM, false);
+    }
 }
