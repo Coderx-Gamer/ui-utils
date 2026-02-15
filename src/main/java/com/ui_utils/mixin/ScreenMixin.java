@@ -9,6 +9,7 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.LecternScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,8 +35,8 @@ public abstract class ScreenMixin {
     private boolean initialized = false;
 
     // inject at the end of the render method (if instanceof LecternScreen)
-    @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
-    public void init(MinecraftClient client, int width, int height, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "init(II)V")
+    public void init(int width, int height, CallbackInfo ci) {
         // check if the current gui is a lectern gui and if ui-utils is enabled
         if (mc.currentScreen instanceof LecternScreen screen && SharedVariables.enabled) {
             // setup widgets
@@ -51,8 +52,8 @@ public abstract class ScreenMixin {
                 // create chat box
                 this.addressField = new TextFieldWidget(textRenderer, 5, 245, 160, 20, Text.of("Chat ...")) {
                     @Override
-                    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-                        if (keyCode == GLFW.GLFW_KEY_ENTER) {
+                    public boolean keyPressed(KeyInput input) {
+                        if (input.getKeycode() == GLFW.GLFW_KEY_ENTER) {
                             if (this.getText().equals("^toggleuiutils")) {
                                 SharedVariables.enabled = !SharedVariables.enabled;
                                 if (mc.player != null) {
@@ -73,7 +74,7 @@ public abstract class ScreenMixin {
 
                             this.setText("");
                         }
-                        return super.keyPressed(keyCode, scanCode, modifiers);
+                        return super.keyPressed(input);
                     }
                 };
                 this.addressField.setText("");
