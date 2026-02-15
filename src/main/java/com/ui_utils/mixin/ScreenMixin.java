@@ -35,8 +35,8 @@ public abstract class ScreenMixin {
     private boolean initialized = false;
 
     // inject at the end of the render method (if instanceof LecternScreen)
-    @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
-    public void init(MinecraftClient client, int width, int height, CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "init(II)V")
+    public void init(int width, int height, CallbackInfo ci) {
         // check if the current gui is a lectern gui and if ui-utils is enabled
         if (mc.currentScreen instanceof LecternScreen screen && SharedVariables.enabled) {
             // setup widgets
